@@ -1,0 +1,353 @@
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsoap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="urn:sap-com:document:sap:soap:functions:mc-style" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:n1="urn:sap-com:document:sap:rfc:functions" targetNamespace="urn:sap-com:document:sap:soap:functions:mc-style">
+	<wsdl:documentation>
+		<sidl:sidl xmlns:sidl="http://www.sap.com/2007/03/sidl"/>
+	</wsdl:documentation>
+	<wsp:UsingPolicy wsdl:required="true"/>
+	<wsp:Policy wsu:Id="BN__ZWFM_GEOCALL_ESITO_ALLEGATI">
+		<wsp:ExactlyOne>
+			<wsp:All>
+				<sapattahnd:Enabled xmlns:sapattahnd="http://www.sap.com/710/features/attachment/">false</sapattahnd:Enabled>
+				<saptrnbnd:OptimizedMimeSerialization xmlns:saptrnbnd="http://schemas.xmlsoap.org/ws/2004/09/policy/optimizedmimeserialization" wsp:Optional="true"/>
+				<wsaw:UsingAddressing xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" wsp:Optional="true"/>
+				<wsp:All xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy">
+					<sp:TransportBinding xmlns:sp="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702" xmlns:sapsp="http://www.sap.com/webas/630/soap/features/security/policy" xmlns:wsa="http://www.w3.org/2005/08/addressing" xmlns:wst="http://docs.oasis-open.org/ws-sx/ws-trust/200512" xmlns:wsu="http://schemas.xmlsoap.org/ws/2002/07/utility" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex">
+						<wsp:Policy>
+							<sp:TransportToken>
+								<wsp:Policy>
+									<sp:HttpsToken>
+										<wsp:Policy>
+											<sp:HttpBasicAuthentication/>
+										</wsp:Policy>
+									</sp:HttpsToken>
+								</wsp:Policy>
+							</sp:TransportToken>
+							<sp:AlgorithmSuite>
+								<wsp:Policy>
+									<sp:Basic128Rsa15/>
+								</wsp:Policy>
+							</sp:AlgorithmSuite>
+							<sp:Layout>
+								<wsp:Policy>
+									<sp:Strict/>
+								</wsp:Policy>
+							</sp:Layout>
+						</wsp:Policy>
+					</sp:TransportBinding>
+				</wsp:All>
+			</wsp:All>
+			<wsp:All>
+				<sapattahnd:Enabled xmlns:sapattahnd="http://www.sap.com/710/features/attachment/">false</sapattahnd:Enabled>
+				<saptrnbnd:OptimizedXMLTransfer xmlns:saptrnbnd="http://www.sap.com/webas/710/soap/features/transportbinding/" uri="http://xml.sap.com/2006/11/esi/esp/binxml" wsp:Optional="true"/>
+				<wsaw:UsingAddressing xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" wsp:Optional="true"/>
+				<wsp:All xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy">
+					<sp:TransportBinding xmlns:sp="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702" xmlns:sapsp="http://www.sap.com/webas/630/soap/features/security/policy" xmlns:wsa="http://www.w3.org/2005/08/addressing" xmlns:wst="http://docs.oasis-open.org/ws-sx/ws-trust/200512" xmlns:wsu="http://schemas.xmlsoap.org/ws/2002/07/utility" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex">
+						<wsp:Policy>
+							<sp:TransportToken>
+								<wsp:Policy>
+									<sp:HttpsToken>
+										<wsp:Policy>
+											<sp:HttpBasicAuthentication/>
+										</wsp:Policy>
+									</sp:HttpsToken>
+								</wsp:Policy>
+							</sp:TransportToken>
+							<sp:AlgorithmSuite>
+								<wsp:Policy>
+									<sp:Basic128Rsa15/>
+								</wsp:Policy>
+							</sp:AlgorithmSuite>
+							<sp:Layout>
+								<wsp:Policy>
+									<sp:Strict/>
+								</wsp:Policy>
+							</sp:Layout>
+						</wsp:Policy>
+					</sp:TransportBinding>
+				</wsp:All>
+			</wsp:All>
+		</wsp:ExactlyOne>
+	</wsp:Policy>
+	<wsp:Policy wsu:Id="BN__ZWFM_GEOCALL_ESITO_ALLEGATI_soap12">
+		<wsp:ExactlyOne>
+			<wsp:All>
+				<sapattahnd:Enabled xmlns:sapattahnd="http://www.sap.com/710/features/attachment/">false</sapattahnd:Enabled>
+				<saptrnbnd:OptimizedMimeSerialization xmlns:saptrnbnd="http://schemas.xmlsoap.org/ws/2004/09/policy/optimizedmimeserialization" wsp:Optional="true"/>
+				<wsaw:UsingAddressing xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" wsp:Optional="true"/>
+				<wsp:All xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy">
+					<sp:TransportBinding xmlns:sp="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702" xmlns:sapsp="http://www.sap.com/webas/630/soap/features/security/policy" xmlns:wsa="http://www.w3.org/2005/08/addressing" xmlns:wst="http://docs.oasis-open.org/ws-sx/ws-trust/200512" xmlns:wsu="http://schemas.xmlsoap.org/ws/2002/07/utility" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex">
+						<wsp:Policy>
+							<sp:TransportToken>
+								<wsp:Policy>
+									<sp:HttpsToken>
+										<wsp:Policy>
+											<sp:HttpBasicAuthentication/>
+										</wsp:Policy>
+									</sp:HttpsToken>
+								</wsp:Policy>
+							</sp:TransportToken>
+							<sp:AlgorithmSuite>
+								<wsp:Policy>
+									<sp:Basic128Rsa15/>
+								</wsp:Policy>
+							</sp:AlgorithmSuite>
+							<sp:Layout>
+								<wsp:Policy>
+									<sp:Strict/>
+								</wsp:Policy>
+							</sp:Layout>
+						</wsp:Policy>
+					</sp:TransportBinding>
+				</wsp:All>
+			</wsp:All>
+			<wsp:All>
+				<sapattahnd:Enabled xmlns:sapattahnd="http://www.sap.com/710/features/attachment/">false</sapattahnd:Enabled>
+				<saptrnbnd:OptimizedXMLTransfer xmlns:saptrnbnd="http://www.sap.com/webas/710/soap/features/transportbinding/" uri="http://xml.sap.com/2006/11/esi/esp/binxml" wsp:Optional="true"/>
+				<wsaw:UsingAddressing xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" wsp:Optional="true"/>
+				<wsp:All xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy">
+					<sp:TransportBinding xmlns:sp="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702" xmlns:sapsp="http://www.sap.com/webas/630/soap/features/security/policy" xmlns:wsa="http://www.w3.org/2005/08/addressing" xmlns:wst="http://docs.oasis-open.org/ws-sx/ws-trust/200512" xmlns:wsu="http://schemas.xmlsoap.org/ws/2002/07/utility" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex">
+						<wsp:Policy>
+							<sp:TransportToken>
+								<wsp:Policy>
+									<sp:HttpsToken>
+										<wsp:Policy>
+											<sp:HttpBasicAuthentication/>
+										</wsp:Policy>
+									</sp:HttpsToken>
+								</wsp:Policy>
+							</sp:TransportToken>
+							<sp:AlgorithmSuite>
+								<wsp:Policy>
+									<sp:Basic128Rsa15/>
+								</wsp:Policy>
+							</sp:AlgorithmSuite>
+							<sp:Layout>
+								<wsp:Policy>
+									<sp:Strict/>
+								</wsp:Policy>
+							</sp:Layout>
+						</wsp:Policy>
+					</sp:TransportBinding>
+				</wsp:All>
+			</wsp:All>
+		</wsp:ExactlyOne>
+	</wsp:Policy>
+	<wsp:Policy wsu:Id="IF__Z_WFM_GEOCALL_ESITO_ALLEGATI">
+		<wsp:ExactlyOne>
+			<wsp:All>
+				<sapsession:Session xmlns:sapsession="http://www.sap.com/webas/630/soap/features/session/">
+					<sapsession:enableSession>false</sapsession:enableSession>
+				</sapsession:Session>
+				<sapcentraladmin:CentralAdministration xmlns:sapcentraladmin="http://www.sap.com/webas/700/soap/features/CentralAdministration/" wsp:Optional="true">
+					<sapcentraladmin:BusinessApplicationID>9A0231A2060C1EEF8EC11D85640C5B8C</sapcentraladmin:BusinessApplicationID>
+				</sapcentraladmin:CentralAdministration>
+			</wsp:All>
+		</wsp:ExactlyOne>
+	</wsp:Policy>
+	<wsp:Policy wsu:Id="OP__ZWsGeocallEsitoAllegati">
+		<wsp:ExactlyOne>
+			<wsp:All>
+				<saptrhnw05:required xmlns:saptrhnw05="http://www.sap.com/NW05/soap/features/transaction/">no</saptrhnw05:required>
+				<sapcomhnd:enableCommit xmlns:sapcomhnd="http://www.sap.com/NW05/soap/features/commit/">false</sapcomhnd:enableCommit>
+				<sapblock:enableBlocking xmlns:sapblock="http://www.sap.com/NW05/soap/features/blocking/">true</sapblock:enableBlocking>
+				<saprmnw05:enableWSRM xmlns:saprmnw05="http://www.sap.com/NW05/soap/features/wsrm/">false</saprmnw05:enableWSRM>
+			</wsp:All>
+		</wsp:ExactlyOne>
+	</wsp:Policy>
+	<wsdl:types>
+		<xsd:schema xmlns:tns="urn:sap-com:document:sap:rfc:functions" attributeFormDefault="qualified" targetNamespace="urn:sap-com:document:sap:rfc:functions">
+			<xsd:simpleType name="char1">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="1"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="char12">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="12"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="char2">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="2"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="char20">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="20"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="char220">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="220"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="char255">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="255"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="char3">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="3"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="char50">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="50"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="char60">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="60"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="numeric3">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="3"/>
+					<xsd:pattern value="\d*"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="numeric6">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="6"/>
+					<xsd:pattern value="\d*"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="string">
+				<xsd:restriction base="xsd:string"/>
+			</xsd:simpleType>
+		</xsd:schema>
+		<xsd:schema xmlns:n0="urn:sap-com:document:sap:rfc:functions" attributeFormDefault="qualified" targetNamespace="urn:sap-com:document:sap:soap:functions:mc-style">
+			<xsd:import namespace="urn:sap-com:document:sap:rfc:functions"/>
+			<xsd:complexType name="ZwfmAllegatoIn">
+				<xsd:sequence>
+					<xsd:element name="TipoAllegato" type="n0:char2"/>
+					<xsd:element name="Progressivo" type="xsd:short"/>
+					<xsd:element name="NomeFileOriginale" type="n0:char60"/>
+					<xsd:element name="NomeFileNormalizzato" type="n0:char60"/>
+					<xsd:element name="Descrizione" type="n0:char60"/>
+					<xsd:element name="Formato" type="n0:char3"/>
+					<xsd:element name="Dimensione" type="xsd:int"/>
+					<xsd:element name="ContFile" type="n0:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="Bapireturn1">
+				<xsd:sequence>
+					<xsd:element name="Type" type="n0:char1"/>
+					<xsd:element name="Id" type="n0:char20"/>
+					<xsd:element name="Number" type="n0:numeric3"/>
+					<xsd:element name="Message" type="n0:char220"/>
+					<xsd:element name="LogNo" type="n0:char20"/>
+					<xsd:element name="LogMsgNo" type="n0:numeric6"/>
+					<xsd:element name="MessageV1" type="n0:char50"/>
+					<xsd:element name="MessageV2" type="n0:char50"/>
+					<xsd:element name="MessageV3" type="n0:char50"/>
+					<xsd:element name="MessageV4" type="n0:char50"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="TableOfBapireturn1">
+				<xsd:sequence>
+					<xsd:element name="item" type="tns:Bapireturn1" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="ZWsGeocallEsitoAllegati">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="Allegato_01" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
+						<xsd:element name="Allegato_02" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
+						<xsd:element name="Allegato_03" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
+						<xsd:element name="Allegato_04" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
+						<xsd:element name="Allegato_05" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
+						<xsd:element name="Allegato_06" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
+						<xsd:element name="Allegato_07" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
+						<xsd:element name="Allegato_08" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
+						<xsd:element name="Allegato_09" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
+						<xsd:element name="Allegato_10" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
+						<xsd:element name="Allegato_11" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
+						<xsd:element name="Allegato_12" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
+						<xsd:element name="Allegato_13" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
+						<xsd:element name="Allegato_14" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
+						<xsd:element name="Allegato_15" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
+						<xsd:element name="Allegato_16" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
+						<xsd:element name="Allegato_17" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
+						<xsd:element name="Allegato_18" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
+						<xsd:element name="Allegato_19" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
+						<xsd:element name="Allegato_20" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
+						<xsd:element name="Externalcode" type="n0:char12"/>
+						<xsd:element name="Notificationnumbersap" type="n0:char12"/>
+						<xsd:element name="TReturn" type="tns:TableOfBapireturn1" minOccurs="0"/>
+						<xsd:element name="TotaleAllegati" type="xsd:short"/>
+						<xsd:element name="Wocode" type="n0:char255" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ZWsGeocallEsitoAllegatiResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="TReturn" type="tns:TableOfBapireturn1" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="ZWsGeocallEsitoAllegati">
+		<wsdl:part name="parameters" element="tns:ZWsGeocallEsitoAllegati"/>
+	</wsdl:message>
+	<wsdl:message name="ZWsGeocallEsitoAllegatiResponse">
+		<wsdl:part name="parameter" element="tns:ZWsGeocallEsitoAllegatiResponse"/>
+	</wsdl:message>
+	<wsdl:portType name="Z_WFM_GEOCALL_ESITO_ALLEGATI">
+		<wsdl:documentation>
+			<sapdoc:sapdoc xmlns:sapdoc="urn:sap:esi:documentation">
+				<sapdoc:docitem docURL="http://s01sapsvil.prv.vestaspa.net:8010/sap/bc/esdt/docu/sd_text?sap-client=300"/>
+			</sapdoc:sapdoc>
+		</wsdl:documentation>
+		<wsp:Policy>
+			<wsp:PolicyReference URI="#IF__Z_WFM_GEOCALL_ESITO_ALLEGATI"/>
+		</wsp:Policy>
+		<wsdl:operation name="ZWsGeocallEsitoAllegati">
+			<wsp:Policy>
+				<wsp:PolicyReference URI="#OP__ZWsGeocallEsitoAllegati"/>
+			</wsp:Policy>
+			<wsdl:input message="tns:ZWsGeocallEsitoAllegati"/>
+			<wsdl:output message="tns:ZWsGeocallEsitoAllegatiResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="ZWFM_GEOCALL_ESITO_ALLEGATI" type="tns:Z_WFM_GEOCALL_ESITO_ALLEGATI">
+		<wsp:Policy>
+			<wsp:PolicyReference URI="#BN__ZWFM_GEOCALL_ESITO_ALLEGATI"/>
+		</wsp:Policy>
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+		<wsdl:operation name="ZWsGeocallEsitoAllegati">
+			<soap:operation soapAction="urn:sap-com:document:sap:soap:functions:mc-style:Z_WFM_GEOCALL_ESITO_ALLEGATI:ZWsGeocallEsitoAllegatiRequest" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="ZWFM_GEOCALL_ESITO_ALLEGATI_soap12" type="tns:Z_WFM_GEOCALL_ESITO_ALLEGATI">
+		<wsp:Policy>
+			<wsp:PolicyReference URI="#BN__ZWFM_GEOCALL_ESITO_ALLEGATI_soap12"/>
+		</wsp:Policy>
+		<wsoap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+		<wsdl:operation name="ZWsGeocallEsitoAllegati">
+			<wsoap12:operation soapAction="urn:sap-com:document:sap:soap:functions:mc-style:Z_WFM_GEOCALL_ESITO_ALLEGATI:ZWsGeocallEsitoAllegatiRequest" style="document"/>
+			<wsdl:input>
+				<wsoap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<wsoap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="ZWFM_GEOCALL_ESITO_ALLEGATI">
+		<wsdl:port name="ZWFM_GEOCALL_ESITO_ALLEGATI" binding="tns:ZWFM_GEOCALL_ESITO_ALLEGATI">
+			<soap:address location="https://s01sapsvil.prv.vestaspa.net:44310/sap/bc/srt/rfc/sap/z_wfm_geocall_esito_allegati/300/zwfm_geocall_esito_allegati/zwfm_geocall_esito_allegati"/>
+		</wsdl:port>
+		<wsdl:port name="ZWFM_GEOCALL_ESITO_ALLEGATI_soap12" binding="tns:ZWFM_GEOCALL_ESITO_ALLEGATI_soap12">
+			<wsoap12:address location="https://s01sapsvil.prv.vestaspa.net:44310/sap/bc/srt/rfc/sap/z_wfm_geocall_esito_allegati/300/zwfm_geocall_esito_allegati/zwfm_geocall_esito_allegati"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

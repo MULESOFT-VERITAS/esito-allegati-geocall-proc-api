@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule
-xmlns:cluster="http://www.mulesoft.org/schema/mule/ee/cluster"
-		xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+<mulexmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	
+xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+		xmlns:cluster="http://www.mulesoft.org/schema/mule/ee/cluster"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
 	xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
 	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
 	xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
-http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd">
 
 	<configuration-properties
 		doc:name="ConfigurationPropertiesForCommon"
@@ -50,16 +52,39 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 		<http:listener-connection host="0.0.0.0"
 			port="${http.port}" />
 	</http:listener-config>
-	<!--  <api-gateway:autodiscovery apiId="${api.id}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="f28f9065-64d5-49c1-aca3-8bcf0b69bb0a" flowRef="esito-allegati-geocall-proc-api" />--> 
- 	<http:request-config name="HttpSystemRequestConfig" doc:name="HTTPRequestconfiguration" doc:id="fc4782fb-7831-4097-bcb2-43aaca1a4101" basePath="${system.basePath}" sendCorrelationId="ALWAYS" responseTimeout="${system.responseTimeout}">
-		<http:request-connection host="${system.host}" port="${system.port}" connectionIdleTimeout="${system.connectionIdleTimeout}" protocol="${system.protocol}"/>
-	</http:request-config>
+	<!--  <api-gateway:autodiscovery apiId="${api.id}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="f28f9065-64d5-49c1-aca3-8bcf0b69bb0a" flowRef="esito-allegati-geocall-proc-api" />-->
 	<apikit:config name="esito-allegati-geocall-proc-config" api="resource::${project.groupId}:${app.specification.artifactId}:${app.specification.version}:raml:zip:${app.specification.artifactId}.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
 	<import doc:name="ImportHealthCheck" doc:id="75cffdd5-6881-4905-97dc-62a8ff5c9418" file="health-check.xml" />
 	<configuration doc:name="Configuration" doc:id="ed55aece-48f9-4416-b69d-394ed03e223d" defaultErrorHandler-ref="Global_Error_Handler" >
 	</configuration>
 	<global-property doc:name="Global Property" doc:id="310c0bf8-e020-4f27-bbae-0e3963ad32cd" name="mule.env" value="dev" />
 	<global-property doc:name="Global Property" doc:id="f6852164-4337-4d3f-825a-b3715c7dbd66" name="mule.secure.key" value='cC-iDtj1:GivEF_df28;$L3db"&lt;09~' />
-	
+<http:request-config name="HTTP_Configuration_SAP" doc:name="HTTP Request configuration" doc:id="42f44970-cbdd-4caf-9b30-903182e16351" responseTimeout="${response.timeout}">
+		<http:request-connection protocol="HTTPS" host="${sap.host}" port="${sap.port}">
+			<reconnection >
+				<reconnect frequency="${http.frequency}" count="${http.reconnection}"/>
+			</reconnection>
+			<tls:context >
+				<tls:trust-store insecure="true" />
+			</tls:context>
+			<http:authentication >
+				<http:basic-authentication username="${sap.user}" password="${secure::sap.password}" />
+			</http:authentication>
+		</http:request-connection>
+	</http:request-config>	
+	<wsc:config name="Web_Service_Consumer_Config" doc:name="Web Service Consumer Config" doc:id="786354d5-fd29-45df-af80-3a018481368d" >
+		<wsc:connection wsdlLocation="externalCalls\zwfm_geocall_esito_allegati.wsdl" service="ZWFM_GEOCALL_ESITO_ALLEGATI" port="ZWFM_GEOCALL_ESITO_ALLEGATI" address="${sap.address}" >
+			<reconnection >
+				<reconnect frequency="${http.frequency}" count="${http.reconnection}" />
+			</reconnection>
+			<wsc:custom-transport-configuration >
+				<wsc:http-transport-configuration requesterConfig="HTTP_Configuration_SAP" />
+			</wsc:custom-transport-configuration>
+			<wsc:web-service-security actor="http://schemas.xmlsoap.org/soap/actor/next" />
+		</wsc:connection>
+	</wsc:config>
+	<http:request-config name="HttpSystemRequestConfig" doc:name="HTTPRequestconfiguration" doc:id="fc4782fb-7831-4097-bcb2-43aaca1a4101" basePath="${system.basePath}" sendCorrelationId="ALWAYS" responseTimeout="${system.responseTimeout}">
+		<http:request-connection host="${system.host}" port="${system.port}" connectionIdleTimeout="${system.connectionIdleTimeout}" protocol="${system.protocol}" />
+	</http:request-config>
 
 </mule>

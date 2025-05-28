@@ -13,7 +13,12 @@ system:
     basePath: "/"
     connectionIdleTimeout: "10000"
     responseTimeout: "5000"
-
+sap:
+    protocol: "HTTPS"
+    user: "SOA_GEOCALL"
+    host: "s4test.gruppoveritas.it"
+    port: "443"
+    address: "https://s4test.gruppoveritas.it/sap/bc/srt/rfc/sap/z_wfm_geocall_esito_allegati/300/zwfm_geocall_esito_allegati/zwfm_geocall_esito_allegati"
 log:
   level: "DEBUG"
  

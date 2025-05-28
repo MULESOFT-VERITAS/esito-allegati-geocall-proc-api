@@ -3,6 +3,8 @@ app:
   specification:
     artifactId: "esito-allegati-geocall-proc"
     version: "1.0.7"
-    
+http:
+  frequency: "2000"
+  reconnection: "2"
 response:
   timeout: "60000"
