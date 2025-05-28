@@ -50,11 +50,11 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 		<http:listener-connection host="0.0.0.0"
 			port="${http.port}" />
 	</http:listener-config>
-	<api-gateway:autodiscovery apiId="${api.id}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="f28f9065-64d5-49c1-aca3-8bcf0b69bb0a" flowRef="raml-design-template" /> 
+	<api-gateway:autodiscovery apiId="${api.id}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="f28f9065-64d5-49c1-aca3-8bcf0b69bb0a" flowRef="esito-allegati-geocall-proc-api" /> 
  	<http:request-config name="HttpSystemRequestConfig" doc:name="HTTPRequestconfiguration" doc:id="fc4782fb-7831-4097-bcb2-43aaca1a4101" basePath="${system.basePath}" sendCorrelationId="ALWAYS" responseTimeout="${system.responseTimeout}">
 		<http:request-connection host="${system.host}" port="${system.port}" connectionIdleTimeout="${system.connectionIdleTimeout}" protocol="${system.protocol}"/>
 	</http:request-config>
-	<apikit:config name="api-config" api="resource::${project.groupId}:${app.specification.artifactId}:${app.specification.version}:raml:zip:raml-design-template.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+	<apikit:config name="api-config" api="resource::${project.groupId}:${app.specification.artifactId}:${app.specification.version}:raml:zip:esito-allegati-geocall-proc.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
 	<import doc:name="ImportHealthCheck" doc:id="75cffdd5-6881-4905-97dc-62a8ff5c9418" file="health-check.xml" />
 	<configuration doc:name="Configuration" doc:id="ed55aece-48f9-4416-b69d-394ed03e223d" defaultErrorHandler-ref="Global_Error_Handler" >
 	</configuration>
