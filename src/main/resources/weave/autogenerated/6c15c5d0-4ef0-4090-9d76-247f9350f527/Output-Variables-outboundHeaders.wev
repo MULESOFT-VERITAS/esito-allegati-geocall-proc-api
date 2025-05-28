@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_6c15c5d0_4ef0_4090_9d76_247f9350f527_Output_Variables_outboundHeaders = {|  |}
+

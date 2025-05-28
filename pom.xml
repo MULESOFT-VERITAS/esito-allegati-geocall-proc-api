@@ -58,13 +58,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>226a3f77-ef40-4d3d-a819-feecee080b3d</groupId>
-			<artifactId>esito-allegati-geocall-proc</artifactId>
-			<version>1.0.3</version>
-			<classifier>raml</classifier>
-			<type>zip</type>
-		</dependency>
-		<dependency>
 			<groupId>org.mule.connectors</groupId>
 			<artifactId>mule-http-connector</artifactId>
 			<version>1.10.3</version>
@@ -105,6 +98,13 @@
 			<artifactId>mule-apikit-module</artifactId>
 			<version>1.11.5</version>
 			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>226a3f77-ef40-4d3d-a819-feecee080b3d</groupId>
+			<artifactId>esito-allegati-geocall-proc</artifactId>
+			<version>1.0.4</version>
+			<classifier>raml</classifier>
+			<type>zip</type>
 		</dependency>
 	</dependencies>
 
