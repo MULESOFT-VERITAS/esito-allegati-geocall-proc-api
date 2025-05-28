@@ -14,6 +14,7 @@ ns ns2 urn:sap-com:document:sap:soap:functions:mc-style
 ns2#ZWsGeocallEsitoAllegati: {
   Allegato_01: {
     TipoAllegato: payload.tipoAllegato,
+    Progressivo: vars.counter,
     NomeFileOriginale: payload.nomeFileOriginale,
     NomeFileNormalizzato: payload.nomeFileNormalizzato,
     Descrizione: payload.descrizione,
@@ -22,7 +23,9 @@ ns2#ZWsGeocallEsitoAllegati: {
     ContFile: vars.attachmentGeoCall.contFile
   },
   Externalcode: vars.savePratica.externalCode,
-  Notificationnumbersap: vars.savePratica.notificationNumberSap
+  Notificationnumbersap: vars.savePratica.notificationNumberSap,
+  TotaleAllegati: vars.countAllegati
+  
 }
 ]]></ee:set-payload>
 			</ee:message>

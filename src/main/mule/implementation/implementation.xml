@@ -6,7 +6,14 @@
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 	<sub-flow name="EsitoGeoCallAllegatiImpl" doc:id="abd64c1a-c95b-45eb-a470-d0a87e1c1e68" >
-		<set-variable value="#[payload.pratica]" doc:name="savePratica" doc:id="163f8fed-9795-4a91-85f4-68cb5a736faa" variableName="savePratica"/>
+		<ee:transform doc:name="saveVars" doc:id="438e3ee3-8e08-46be-8468-b4398a6da7bd" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="savePratica" ><![CDATA[payload.pratica]]></ee:set-variable>
+				<ee:set-variable variableName="countAllegati" ><![CDATA[sizeOf(payload.listaAllegati)]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
 		<foreach doc:name="For Each" doc:id="e8fb82c9-0820-4a23-98c3-6339d7700653" collection="#[payload.listaAllegati]">
 			<flow-ref doc:name="getAttachFromGeoCallSub" doc:id="9244ea6d-d185-454e-ab90-934ccf338477" name="getAttachFromGeoCallSub" target="attachmentGeocall" />
 			<flow-ref doc:name="esitoAllegatiToSapCallSub" doc:id="d33ae757-ec6a-4366-bcb0-9f0395aea277" name="esitoAllegatiToSapCallSub" />
