@@ -54,12 +54,12 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
  	<http:request-config name="HttpSystemRequestConfig" doc:name="HTTPRequestconfiguration" doc:id="fc4782fb-7831-4097-bcb2-43aaca1a4101" basePath="${system.basePath}" sendCorrelationId="ALWAYS" responseTimeout="${system.responseTimeout}">
 		<http:request-connection host="${system.host}" port="${system.port}" connectionIdleTimeout="${system.connectionIdleTimeout}" protocol="${system.protocol}"/>
 	</http:request-config>
-	<apikit:config name="api-config" api="resource::${project.groupId}:${app.specification.artifactId}:${app.specification.version}:raml:zip:esito-allegati-geocall-proc.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+	<apikit:config name="api-config" api="resource::${project.groupId}:${app.specification.artifactId}:${app.specification.version}:raml:zip:${app.specification.artifactId}.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
 	<import doc:name="ImportHealthCheck" doc:id="75cffdd5-6881-4905-97dc-62a8ff5c9418" file="health-check.xml" />
 	<configuration doc:name="Configuration" doc:id="ed55aece-48f9-4416-b69d-394ed03e223d" defaultErrorHandler-ref="Global_Error_Handler" >
 	</configuration>
 	<global-property doc:name="Global Property" doc:id="310c0bf8-e020-4f27-bbae-0e3963ad32cd" name="mule.env" value="dev" />
-	<global-property doc:name="Global Property" doc:id="f6852164-4337-4d3f-825a-b3715c7dbd66" name="mule.secure.key" value="111111111111111111111111" />
+	<global-property doc:name="Global Property" doc:id="f6852164-4337-4d3f-825a-b3715c7dbd66" name="mule.secure.key" value='cC-iDtj1:GivEF_df28;$L3db"&lt;09~' />
 	
 
 </mule>

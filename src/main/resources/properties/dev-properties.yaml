@@ -6,8 +6,6 @@ https:
   port: "8082"
 api: 
   id: "1234567"
-
-#Insert the correct configuration for the http request 
 system:
     protocol: "HTTP"
     host: "does-not-exist.cloudhub.io"
