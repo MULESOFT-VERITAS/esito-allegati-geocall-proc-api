@@ -4,7 +4,7 @@
 
 	<groupId>c93d75ba-ab17-43a0-8264-1106596665ec</groupId>
 	<artifactId>esito-allegati-geocall-proc-api</artifactId>
-	<version>1.1.1</version>
+	<version>1.0.0</version>
 	<packaging>mule-application</packaging>
 
 	<name>esito-allegati-geocall-proc-api</name>
