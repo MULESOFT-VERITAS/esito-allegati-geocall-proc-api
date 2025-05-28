@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation"
+	xmlns:sqs="http://www.mulesoft.org/schema/mule/sqs"
+	xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd 
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd">
+	<sub-flow name="save-input-subflow" doc:id="d5eee6f3-2044-4743-bcb0-8bb389bacde1" >
+		<set-variable value="#[attributes.relativePath]" doc:name="path-name" doc:id="70ff3a32-8f22-4d4f-a5af-9cb69dc2caae" variableName="pathName"/>
+		<set-variable value="#[payload]" doc:name="input-payload" doc:id="7e757a4c-cd6b-4193-851b-d1b57b5c7092" variableName="inputPayload"/>
+		<set-variable value="#[attributes]" doc:name="input-attributes" doc:id="afa153b2-8fe3-4f39-b223-37e12583f5b7" variableName="inputAttributes"/>
+	</sub-flow>
+	<sub-flow name="clear-input-subflow" doc:id="80d7b09b-6630-4f2d-835b-f3d4b248c83c" >
+		<remove-variable doc:name="input-payload" doc:id="d1b0ae24-1ade-4229-b802-d1e412d7bb0b" variableName="inputPayload"/>
+		<remove-variable doc:name="input-attributes" doc:id="43b6fbc3-a067-4970-8470-a5644a3094ea" variableName="inputAttributes"/>
+	</sub-flow>	
+</mule>

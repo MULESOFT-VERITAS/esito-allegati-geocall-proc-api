@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<error-handler name="Apikit_Error_Handler" doc:id="b08a01a3-6844-4ac6-8c76-f81445af7aef">
+	<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="9bdff357-538b-4703-8667-f19d1992490b" when="#[(error.errorType.namespace == 'APIKIT') or (error.errorType.identifier contains 'APIKIT')]">
+			<ee:transform doc:name="httpStatus" doc:id="030b4031-75f0-4fc5-9f84-9426d570922f">
+				<ee:message>
+				</ee:message>
+				<ee:variables>
+					<ee:set-variable variableName="httpStatus"><![CDATA[output application/json
+
+var apikitErrorType = "$(error.errorType.namespace default 'APIKIT'):$(error.errorType.identifier default '')"
+---
+apikitErrorType match {
+  case "APIKIT:BAD_REQUEST" -> 400
+  case "APIKIT:NOT_FOUND" -> 404
+  case "APIKIT:METHOD_NOT_ALLOWED" -> 405
+  case "APIKIT:NOT_ACCEPTABLE" -> 406
+  case "APIKIT:UNSUPPORTED_MEDIA_TYPE" -> 415
+  case "APIKIT:NOT_IMPLEMENTED" -> 501
+  case "APIKIT:ANY" -> 500
+}]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<ee:transform doc:name="error-payload" doc:id="78eb0bd3-0914-4f03-9241-beda907ab619" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
+import ErrorMapper
+output application/json skipNullOn="everywhere"
+---
+ErrorMapper::error(
+	{
+		error:error, 
+		errorCode: vars.httpStatus default 500,
+		vars:vars,
+		correlationId:correlationId, 
+		app:app, 
+		mule:mule,
+		env: p('mule.env')
+	}
+)]]></ee:set-payload>
+				</ee:message>
+				<ee:variables />
+			</ee:transform>
+<logger level="ERROR" doc:name="log-error" doc:id="182c57ce-fa2e-47c6-be24-3f1004a72f49" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload.infoMessage default &quot;&quot;&#10;var status = &quot;KO&quot;&#10;var msg = &quot;An APIKIT Error Occurred&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10;	{&#10;		correlationId: correlationId,&#10;		app: app,&#10;		mule: mule,&#10;		status: status,&#10;		message: msg,&#10;		payload: logPayload,		 &#10;		env: p('mule.env')&#10;	}&#10;)]" />			
+		</on-error-propagate>
+	</error-handler>
+	<error-handler name="Global_Error_Handler" doc:id="c4ec2e41-0923-49a7-bdf3-3baa0eaf4b40" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="0aad0a6c-be3c-4185-992a-6b62039c20ef" type="HTTP:NOT_FOUND" when='#[isEmpty(vars."error-already-logged")]'>
+			<set-variable value="404" doc:name="httpStatus" doc:id="b3f690b6-0bcd-4f79-81a1-a41397981c86" variableName="httpStatus" />
+			<flow-ref doc:name="CommonErrorMsgTemplate" doc:id="04936323-4edf-44e1-882f-ecdf1cce012b" name="CommonErrorMsgTemplate" />
+
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="ed4a951d-2140-43a0-89d1-4b736453c968" type="HTTP:INTERNAL_SERVER_ERROR" when='#[isEmpty(vars."error-already-logged")]'>
+			<set-variable value="500" doc:name="httpStatus" doc:id="7ea4ba22-f771-41df-a1b1-c7fe8aba1a86" variableName="httpStatus" />
+			<flow-ref doc:name="CommonErrorMsgTemplate" doc:id="2d03fac2-cc4f-4e2c-b637-74c6b0316a37" name="CommonErrorMsgTemplate" />
+
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="31c0c9ac-fd55-4012-b0f4-5d47959bfe7e" type="HTTP:TIMEOUT" when='#[isEmpty(vars."error-already-logged")]'>
+			<set-variable value="408" doc:name="httpStatus" doc:id="886bb57f-043a-471a-86f6-77059648176a" variableName="httpStatus" />
+			<flow-ref doc:name="CommonErrorMsgTemplate" doc:id="7029d44b-92ff-4a76-be2a-54098d336e82" name="CommonErrorMsgTemplate" />
+
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="1e05879f-9713-4688-a399-6e7672b78963" type="MULE:EXPRESSION" when='#[isEmpty(vars."error-already-logged")]'>
+			<set-variable value="500" doc:name="httpStatus" doc:id="3e89ca96-5db8-4f5d-a9e2-9c259dac4d58" variableName="httpStatus" />
+			<flow-ref doc:name="CommonErrorMsgTemplate" doc:id="513946a3-b22e-4705-912a-0c5c51aeefc7" name="CommonErrorMsgTemplate" />
+
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="aab574d6-a6ba-44ee-87ac-7a45030c0a96" type="HTTP:UNAUTHORIZED" when='#[isEmpty(vars."error-already-logged")]'>
+			<set-variable value="401" doc:name="httpStatus" doc:id="eb7fed13-abe1-40dc-98e8-392f6d40e16d" variableName="httpStatus" />
+			<flow-ref doc:name="CommonErrorMsgTemplate" doc:id="feddd27f-07b1-46d5-9ce7-dbf50ea98207" name="CommonErrorMsgTemplate" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="ff4c302f-c1d3-4e48-abd2-ec443906ea6d" type="HTTP:BAD_REQUEST" when='#[isEmpty(vars."error-already-logged")]'>
+			<set-variable value="400" doc:name="httpStatus" doc:id="0cba296e-2ac9-41f3-ad9e-7582a6843546" variableName="httpStatus" />
+			<flow-ref doc:name="CommonErrorMsgTemplate" doc:id="3e9d8f96-d6b8-4741-8d8a-bf17e222d49f" name="CommonErrorMsgTemplate" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="6c045a95-461c-47ce-ae7e-410aef4e7964" type="HTTP:FORBIDDEN" when='#[isEmpty(vars."error-already-logged")]'>
+			<set-variable value="403" doc:name="httpStatus" doc:id="3fa97a55-5c37-46e9-84d4-376411d87f46" variableName="httpStatus" />
+			<flow-ref doc:name="CommonErrorMsgTemplate" doc:id="ad88d5cd-4e36-43ad-bad9-71ba0d1a310a" name="CommonErrorMsgTemplate" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="8cb96684-02da-4a70-bfd5-d2e18aceb659" type="ANY" when='#[isEmpty(vars."error-already-logged")]'>
+			<flow-ref doc:name="CommonErrorMsgTemplate" doc:id="12466ac8-1a96-466f-8017-81427cab3d8c" name="CommonErrorMsgTemplate" />
+		</on-error-propagate>
+		
+
+</error-handler>
+	<sub-flow name="CommonErrorMsgTemplate" doc:id="3cc262a9-3c2a-4a8a-95c6-349e8eac881f" >
+		<ee:transform doc:name="error" doc:id="a303d2c7-fdb1-4143-885a-f770aeb3d73b">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+import ErrorMapper
+import mergeWith from dw::core::Objects
+output application/json skipNullOn="everywhere"
+---
+ErrorMapper::error(
+	{
+		error:error, 
+		errorCode: vars.httpStatus default 500,
+		vars:vars,
+		correlationId:correlationId, 
+		app:app, 
+		mule:mule,
+		env: p('mule.env')
+	}
+)]]></ee:set-payload>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="error-already-logged"><![CDATA["error-already-handled"]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger error" doc:id="63ba12fe-6d0a-4135-bb49-73c9cebfb52b" message='#[import mergeWith from dw::core::Objects&#10;output json &#10;---&#10; payload  mergeWith {&#10;	("childErrors": error.childErrors)if(!isEmpty(error.childErrors)),&#10;    "falingComponent": error.failingComponent &#10;}]' />
+	</sub-flow>
+	
+</mule>

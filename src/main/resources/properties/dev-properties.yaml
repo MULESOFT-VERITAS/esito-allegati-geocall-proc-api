@@ -1,0 +1,21 @@
+http:
+  port: "8081"
+  private: 
+    port: "8091"
+https:
+  port: "8082"
+api: 
+  id: "1234567"
+
+#Insert the correct configuration for the http request 
+system:
+    protocol: "HTTP"
+    host: "does-not-exist.cloudhub.io"
+    port: "80"
+    basePath: "/"
+    connectionIdleTimeout: "10000"
+    responseTimeout: "5000"
+
+log:
+  level: "DEBUG"
+ 

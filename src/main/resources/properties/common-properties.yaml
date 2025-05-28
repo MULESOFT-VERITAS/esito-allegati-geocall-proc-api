@@ -1,0 +1,11 @@
+#The values ​​should be modified as your API develops.
+project.groupId: ${see-common.properties to change project.groupId}
+
+app:
+  specification:
+   artifactId: "226a3f77-ef40-4d3d-a819-feecee080b3d"
+   version: "1.0.0"
+application:
+  layer: "Process"
+response:
+  timeout: "60000"

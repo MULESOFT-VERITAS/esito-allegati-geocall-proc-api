@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_1f13db1b_6963_4f5a_85fe_903688e5f1bd_Output_Variables_httpStatus = Number
+
