@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<sub-flow name="EsitoGeoCallAllegatiImpl" doc:id="abd64c1a-c95b-45eb-a470-d0a87e1c1e68" >
+		<set-variable value="#[payload.pratica]" doc:name="savePratica" doc:id="163f8fed-9795-4a91-85f4-68cb5a736faa" variableName="savePratica"/>
+		<foreach doc:name="For Each" doc:id="e8fb82c9-0820-4a23-98c3-6339d7700653" collection="#[payload.listaAllegati]">
+			<flow-ref doc:name="getAttachFromGeoCallSub" doc:id="9244ea6d-d185-454e-ab90-934ccf338477" name="getAttachFromGeoCallSub" target="attachmentGeocall" />
+			<flow-ref doc:name="esitoAllegatiToSapCallSub" doc:id="d33ae757-ec6a-4366-bcb0-9f0395aea277" name="esitoAllegatiToSapCallSub" />
+		</foreach>
+	</sub-flow>
+	<flow name="hello-implementation" doc:id="9aff5118-6dcc-47eb-ab2a-7a4cf3624c3e" >
+		<flow-ref doc:name="save-input-subflow" doc:id="b5ffe893-47ed-4975-b778-005a8bfb410c" name="save-input-subflow" />
+		<logger level="INFO" doc:name="log-request-received" doc:id="244315e3-8dae-40c9-afac-ead6df266266" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;Request Received for Hello flow&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10;	{&#10;		correlationId: correlationId,&#10;		app: app,&#10;		mule: mule,&#10;		status: status,&#10;		message: msg,&#10;		(payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),		 &#10;		env: p('mule.env')&#10;	}&#10;)]" />
+		<flow-ref doc:name="request-transformation" doc:id="0903a629-265e-48f2-b126-95b6e75021ed" name="request-transformation" />
+		<flow-ref doc:name="process-request" doc:id="13d41647-4f6a-45cf-8693-72320bed58f9" name="process-request" />
+		<flow-ref doc:name="response-transformation" doc:id="06ab33ad-e7f2-4778-ae47-3207ca1c9c7c" name="response-transformation" />
+		<logger level="INFO" doc:name="log-response-received" doc:id="20c46801-8fcd-4dae-b0a4-c13baf11f5d6" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;Response Received for Hello Flow&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10;	{&#10;		correlationId: correlationId,&#10;		app: app,&#10;		mule: mule,&#10;		status: status,&#10;		message: msg,&#10;		(payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),		 &#10;		env: p('mule.env')&#10;	}&#10;)]" />
+	</flow>
+	<sub-flow name="request-transformation" doc:id="699722cd-b5d5-4ca2-b68c-259d30c968da" >
+		<ee:transform doc:name="payload" doc:id="80f11dbc-d023-426a-8eb7-84b350a41bb2" >
+			<ee:message >
+				<ee:set-payload resource="dw/p-transform-request.dwl" />
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="log-transformation-request" doc:id="6cb126e9-4038-4833-8191-6ef75d3572db" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;Transformation Request Executed for Hello Flow&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10;	{&#10;		correlationId: correlationId,&#10;		app: app,&#10;		mule: mule,&#10;		status: status,&#10;		message: msg,&#10;		(payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),		 &#10;		env: p('mule.env')&#10;	}&#10;)]" />
+	</sub-flow>
+	<sub-flow name="process-request" doc:id="47678e84-aff2-491a-a57e-47436172fd62" >
+		<choice doc:name="Choice" doc:id="73c32fd5-f755-46c3-8228-fcdc5d4ea4c5" >
+			<when expression='#[attributes.headers.mock == "false"]' >
+				<http:request method="GET" doc:name="Request" doc:id="7698a572-4da6-41f3-93b8-8b51288796d9" config-ref="HttpSystemRequestConfig" path="/mock" sendCorrelationId="ALWAYS" correlationId="#[correlationId]" responseTimeout="10000" >
+					<http:body ><![CDATA[#[output application/json ---
+{
+	"test": "ok"
+}]]]></http:body>
+				</http:request>
+			</when>
+			<otherwise >
+				<set-payload value='#[output application/json&#10;---&#10;{&#10;	"message": "ok"&#10;}]' doc:name="outputPayload" doc:id="11148c62-7f16-4dfa-895a-a4399571d947" />
+			</otherwise>
+		</choice>
+	</sub-flow>
+	<sub-flow name="response-transformation" doc:id="9a18daa5-5f6a-47e6-8162-2ac0b4ca7b74" >
+		<ee:transform doc:name="payload" doc:id="7783e9bc-8830-4418-8594-c7090fcc1a7c" >
+			<ee:message >
+				<ee:set-payload resource="dw/p-transform-response.dwl" />
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="log-transformation-request" doc:id="91f1cc4c-7d81-4f65-8d7c-c1ee4c25901e" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;Transformation Response Executed for Hello Flow&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10;	{&#10;		correlationId: correlationId,&#10;		app: app,&#10;		mule: mule,&#10;		status: status,&#10;		message: msg,&#10;		(payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),		 &#10;		env: p('mule.env')&#10;	}&#10;)]" />
+	</sub-flow>
+</mule>

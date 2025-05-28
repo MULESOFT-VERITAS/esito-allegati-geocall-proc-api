@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
-	<sub-flow name="EsitoGeoCallAllegatiImpl" doc:id="abd64c1a-c95b-45eb-a470-d0a87e1c1e68" >
-		<raise-error doc:name="Raise error" doc:id="27ec3939-fe0d-49fa-972c-cf1423284f92" type="ANY"/>
-	</sub-flow>
-</mule>
