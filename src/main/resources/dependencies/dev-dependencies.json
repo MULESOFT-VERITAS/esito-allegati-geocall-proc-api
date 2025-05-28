@@ -2,10 +2,10 @@
 	{
 		"name": "hello-cloud",
 		"tier": "system", 
-	     "protocol": "http",
-	     "host": "am-sample-system-api.de-c1.cloudhub.io",
-	     "port": "80",
+	     "protocol": "https",
+	     "host": "webhooks.workato.com",
+	     "port": "443",
 	     "basepath": "",
-	     "path": "/hello"
+	     "path": "/webhooks/rest/2f327c17-9818-48f2-a0b4-bbed9d1c1b6d/inserisciclienteasync"
      }
 ]
