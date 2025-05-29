@@ -200,7 +200,7 @@ output application/json
     "errorCode": vars.httpStatus,
     "errorDescription": "Errore invocazione al webservice",
     "errorOn": p('app.name'),
-    "errorType": error.errorType
+    "errorType": error.errorType.identifier
   }
 }]]></ee:set-payload>
 			</ee:message>
