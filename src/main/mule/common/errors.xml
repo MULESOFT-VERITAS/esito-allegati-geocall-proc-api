@@ -112,7 +112,7 @@ ErrorMapper::error(
 				<ee:set-variable variableName="error-already-logged"><![CDATA["error-already-handled"]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<logger level="INFO" doc:name="Logger error" doc:id="63ba12fe-6d0a-4135-bb49-73c9cebfb52b" message='#[import mergeWith from dw::core::Objects&#10;output json &#10;---&#10; payload  mergeWith {&#10;	("childErrors": error.childErrors)if(!isEmpty(error.childErrors)),&#10;    "falingComponent": error.failingComponent &#10;}]' />
+		<logger level="INFO" doc:name="Logger error" doc:id="63ba12fe-6d0a-4135-bb49-73c9cebfb52b" message='#[import mergeWith from dw::core::Objects&#10;output json &#10;---&#10; payload  mergeWith {&#10;	("childErrors": error.childErrors)if(!isEmpty(error.childErrors)),&#10;    "falingComponent": error.failingComponent,&#10;  	 correlationId: vars.correlationId default correlationId&#10;}]' />
 	</sub-flow>
 	
 </mule>
