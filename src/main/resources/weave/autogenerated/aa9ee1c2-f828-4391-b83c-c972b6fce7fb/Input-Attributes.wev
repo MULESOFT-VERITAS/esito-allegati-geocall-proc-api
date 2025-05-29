@@ -1,0 +1,5 @@
+%dw 2.0
+
+type auto_aa9ee1c2_f828_4391_b83c_c972b6fce7fb_Input_Attributes = {| messageId: String |} {"typeAlias": "AnypointMQMessagePublishAttributes",
+"typeId": "com.mulesoft.extension.mq.api.attributes.AnypointMQMessagePublishAttributes"}
+
