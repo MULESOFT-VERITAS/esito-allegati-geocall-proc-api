@@ -24,6 +24,7 @@ mq:
   client_id: "4df09069169d4272aca6e297c228364a"
   esito-allegati: "esito-allegati-geocall-sap"
   esito-allegati-dlq: "esito-allegati-geocall-sap.DLQ"
+  max-local-message: "30"
 log:
   level: "DEBUG"
  

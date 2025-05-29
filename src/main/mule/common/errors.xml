@@ -46,7 +46,7 @@ ErrorMapper::error(
 				</ee:message>
 				<ee:variables />
 			</ee:transform>
-<logger level="ERROR" doc:name="log-error" doc:id="182c57ce-fa2e-47c6-be24-3f1004a72f49" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload.infoMessage default &quot;&quot;&#10;var status = &quot;KO&quot;&#10;var msg = &quot;An APIKIT Error Occurred&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10;	{&#10;		correlationId: correlationId,&#10;		app: app,&#10;		mule: mule,&#10;		status: status,&#10;		message: msg,&#10;		payload: logPayload,		 &#10;		env: p('mule.env')&#10;	}&#10;)]" />			
+<logger level="ERROR" doc:name="log-error" doc:id="182c57ce-fa2e-47c6-be24-3f1004a72f49" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload.infoMessage default &quot;&quot;&#10;var status = &quot;KO&quot;&#10;var msg = &quot;An APIKIT Error Occurred&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10;	{&#10;  		correlationId: vars.correlationId default correlationId,&#10;		app: app,&#10;		mule: mule,&#10;		status: status,&#10;		message: msg,&#10;		payload: logPayload,		 &#10;		env: p('mule.env')&#10;	}&#10;)]" />			
 		</on-error-propagate>
 	</error-handler>
 	<error-handler name="Global_Error_Handler" doc:id="c4ec2e41-0923-49a7-bdf3-3baa0eaf4b40" >

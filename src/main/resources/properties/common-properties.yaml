@@ -2,8 +2,11 @@ project.groupId: "226a3f77-ef40-4d3d-a819-feecee080b3d"
 app:
   specification:
     artifactId: "esito-allegati-geocall-proc"
-    version: "1.0.7"
+    version: "1.0.8"
 http:
+  frequency: "2000"
+  reconnection: "2"
+mq:
   frequency: "2000"
   reconnection: "2"
 response:

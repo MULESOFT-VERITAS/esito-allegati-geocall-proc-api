@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd 
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+<mule xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd 
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd">
 	<flow name="esito-allegati-geocall-proc-api">
         <http:listener path="/api/*" config-ref="HttpListenerConfig">
             <http:response statusCode="#[vars.httpStatus default 200]">
@@ -17,8 +18,37 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
     </flow>
 	<flow name="post:\v1\esito\allegati:application\json:esito-allegati-geocall-proc-config" doc:id="bd26fd39-89a6-4057-ad26-5f29016bfc61">
 		<logger level="INFO" doc:name="START" doc:id="ef3c9f6a-3ac7-4393-831d-acf4824bc91a" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;START Geocall Esito Allegati&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
-		<flow-ref doc:name="EsitoGeoCallAllegatiImpl" doc:id="7f4fcee9-9042-4da9-aa08-5132623fe3e1" name="EsitoGeoCallAllegatiImpl"/>
+		<anypoint-mq:publish doc:name="Publish" doc:id="e22b9afb-2d84-459b-8f35-db2ffca4b999" config-ref="Anypoint_MQ_Config" destination="${mq.esito-allegati}">
+			<reconnect frequency="${mq.frequency}" count="${mq.reconnection}" />
+			<anypoint-mq:properties ><![CDATA[#[{
+	corrlationId: vars.correlationId
+}]]]></anypoint-mq:properties>
+		</anypoint-mq:publish>
+		<ee:transform doc:name="output" doc:id="d6556315-dbbf-451d-be1e-6b1a86300a68" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+
+{
+  "message": "Request has been accepted for processing"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
 		<logger level="INFO" doc:name="END" doc:id="d9d9044d-bd1b-4aa6-9c16-2894459c3ea1" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;END Geocall Esito Allegati&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
+		<error-handler ref="Global_Error_Handler" />
+	</flow>
+	<flow name="esito-allegati-geocall-proc-apiFlow" doc:id="35067412-781d-48a4-9d90-37e55aab8648" >
+		<anypoint-mq:subscriber doc:name="Subscriber" doc:id="f50ca782-f42b-4d03-ba24-9853baf89e5f" config-ref="Anypoint_MQ_Config" destination="${mq.esito-allegati}" acknowledgementMode="IMMEDIATE">
+			<reconnect frequency="${mq.frequency}" count="${mq.reconnection}" />
+			<anypoint-mq:subscriber-type >
+				<anypoint-mq:prefetch maxLocalMessages="${mq.max-local-message}" />
+			</anypoint-mq:subscriber-type>
+		</anypoint-mq:subscriber>
+		<set-variable value="#[attributes.properties.corrlationId default correlationId]" doc:name="correlationId" doc:id="03003dbf-9131-4894-8d91-9b2da016c484" variableName="correlationId" />
+		<logger level="INFO" doc:name="START" doc:id="ab1fd581-2cd3-4d45-802f-823fe0251590" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;START Geocall Esito Allegati ASYNC&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: vars.correlationId default correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
+		<flow-ref doc:name="EsitoGeoCallAllegatiImpl" doc:id="7f4fcee9-9042-4da9-aa08-5132623fe3e1" name="EsitoGeoCallAllegatiImpl" />
+		<logger level="INFO" doc:name="END" doc:id="5569e041-5770-4911-83ff-467f3269e7ac" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;END Geocall Esito Allegati ASYNC&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: vars.correlationId default correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
 		<error-handler ref="Global_Error_Handler" />
 	</flow>
 	<flow name="esito-allegati-geocall-proc-health" doc:id="9940f9bd-f322-48f2-b7a1-afbcfc927887">
