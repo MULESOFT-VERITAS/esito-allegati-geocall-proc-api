@@ -68,14 +68,14 @@ output application/json
 			<flow-ref doc:name="esitoAllegatiToSapCallSub" doc:id="d33ae757-ec6a-4366-bcb0-9f0395aea277" name="esitoAllegatiToSapCallSub" />
 		</foreach>
 	</sub-flow>
-	<flow name="hello-implementation" doc:id="9aff5118-6dcc-47eb-ab2a-7a4cf3624c3e" >
+	<sub-flow name="hello-implementation" doc:id="184f5c0b-cda3-406d-a7a7-6b873494239f" >
 		<flow-ref doc:name="save-input-subflow" doc:id="b5ffe893-47ed-4975-b778-005a8bfb410c" name="save-input-subflow" />
 		<logger level="INFO" doc:name="log-request-received" doc:id="244315e3-8dae-40c9-afac-ead6df266266" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;Request Received for Hello flow&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10;	{&#10;		correlationId: correlationId,&#10;		app: app,&#10;		mule: mule,&#10;		status: status,&#10;		message: msg,&#10;		(payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),		 &#10;		env: p('mule.env')&#10;	}&#10;)]" />
 		<flow-ref doc:name="request-transformation" doc:id="0903a629-265e-48f2-b126-95b6e75021ed" name="request-transformation" />
 		<flow-ref doc:name="process-request" doc:id="13d41647-4f6a-45cf-8693-72320bed58f9" name="process-request" />
 		<flow-ref doc:name="response-transformation" doc:id="06ab33ad-e7f2-4778-ae47-3207ca1c9c7c" name="response-transformation" />
 		<logger level="INFO" doc:name="log-response-received" doc:id="20c46801-8fcd-4dae-b0a4-c13baf11f5d6" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;Response Received for Hello Flow&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10;	{&#10;		correlationId: correlationId,&#10;		app: app,&#10;		mule: mule,&#10;		status: status,&#10;		message: msg,&#10;		(payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),		 &#10;		env: p('mule.env')&#10;	}&#10;)]" />
-	</flow>
+	</sub-flow>
 	<sub-flow name="request-transformation" doc:id="699722cd-b5d5-4ca2-b68c-259d30c968da" >
 		<ee:transform doc:name="payload" doc:id="80f11dbc-d023-426a-8eb7-84b350a41bb2" >
 			<ee:message >
