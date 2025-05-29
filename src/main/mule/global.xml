@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mulexmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+<mulexmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq"
 	
-xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
-		xmlns:cluster="http://www.mulesoft.org/schema/mule/ee/cluster"
+xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+		xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+	xmlns:cluster="http://www.mulesoft.org/schema/mule/ee/cluster"
 	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
 	xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
 	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
-	xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
 http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
-http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd">
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd">
 
 	<configuration-properties
 		doc:name="ConfigurationPropertiesForCommon"
@@ -86,5 +87,8 @@ http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/
 	<http:request-config name="HttpSystemRequestConfig" doc:name="HTTPRequestconfiguration" doc:id="fc4782fb-7831-4097-bcb2-43aaca1a4101" basePath="${system.basePath}" sendCorrelationId="ALWAYS" responseTimeout="${system.responseTimeout}">
 		<http:request-connection host="${system.host}" port="${system.port}" connectionIdleTimeout="${system.connectionIdleTimeout}" protocol="${system.protocol}" />
 	</http:request-config>
+	<anypoint-mq:config name="Anypoint_MQ_Config" doc:name="Anypoint MQ Config" doc:id="9f3861e5-0c54-4a53-b700-bc0dd43ae2da" >
+		<anypoint-mq:connection url="${mq.host}" clientId="${mq.client_id}" clientSecret="${secure::mq.client_secret}" />
+	</anypoint-mq:config>
 
 </mule>
