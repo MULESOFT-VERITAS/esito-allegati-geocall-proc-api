@@ -1,9 +1,10 @@
-<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsoap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="urn:sap-com:document:sap:soap:functions:mc-style" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:n1="urn:sap-com:document:sap:rfc:functions" targetNamespace="urn:sap-com:document:sap:soap:functions:mc-style">
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions targetNamespace="urn:sap-com:document:sap:rfc:functions" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsoap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="urn:sap-com:document:sap:rfc:functions" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
 	<wsdl:documentation>
 		<sidl:sidl xmlns:sidl="http://www.sap.com/2007/03/sidl"/>
 	</wsdl:documentation>
 	<wsp:UsingPolicy wsdl:required="true"/>
-	<wsp:Policy wsu:Id="BN__ZWFM_GEOCALL_ESITO_ALLEGATI">
+	<wsp:Policy wsu:Id="BN__Z_WFM_GEOCALL_ESITO_ALLEGATI">
 		<wsp:ExactlyOne>
 			<wsp:All>
 				<sapattahnd:Enabled xmlns:sapattahnd="http://www.sap.com/710/features/attachment/">false</sapattahnd:Enabled>
@@ -37,7 +38,7 @@
 			</wsp:All>
 			<wsp:All>
 				<sapattahnd:Enabled xmlns:sapattahnd="http://www.sap.com/710/features/attachment/">false</sapattahnd:Enabled>
-				<saptrnbnd:OptimizedXMLTransfer xmlns:saptrnbnd="http://www.sap.com/webas/710/soap/features/transportbinding/" uri="http://xml.sap.com/2006/11/esi/esp/binxml" wsp:Optional="true"/>
+				<saptrnbnd:OptimizedXMLTransfer uri="http://xml.sap.com/2006/11/esi/esp/binxml" xmlns:saptrnbnd="http://www.sap.com/webas/710/soap/features/transportbinding/" wsp:Optional="true"/>
 				<wsaw:UsingAddressing xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" wsp:Optional="true"/>
 				<wsp:All xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy">
 					<sp:TransportBinding xmlns:sp="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702" xmlns:sapsp="http://www.sap.com/webas/630/soap/features/security/policy" xmlns:wsa="http://www.w3.org/2005/08/addressing" xmlns:wst="http://docs.oasis-open.org/ws-sx/ws-trust/200512" xmlns:wsu="http://schemas.xmlsoap.org/ws/2002/07/utility" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex">
@@ -67,7 +68,7 @@
 			</wsp:All>
 		</wsp:ExactlyOne>
 	</wsp:Policy>
-	<wsp:Policy wsu:Id="BN__ZWFM_GEOCALL_ESITO_ALLEGATI_soap12">
+	<wsp:Policy wsu:Id="BN__Z_WFM_GEOCALL_ESITO_ALLEGATI_soap12">
 		<wsp:ExactlyOne>
 			<wsp:All>
 				<sapattahnd:Enabled xmlns:sapattahnd="http://www.sap.com/710/features/attachment/">false</sapattahnd:Enabled>
@@ -101,7 +102,7 @@
 			</wsp:All>
 			<wsp:All>
 				<sapattahnd:Enabled xmlns:sapattahnd="http://www.sap.com/710/features/attachment/">false</sapattahnd:Enabled>
-				<saptrnbnd:OptimizedXMLTransfer xmlns:saptrnbnd="http://www.sap.com/webas/710/soap/features/transportbinding/" uri="http://xml.sap.com/2006/11/esi/esp/binxml" wsp:Optional="true"/>
+				<saptrnbnd:OptimizedXMLTransfer uri="http://xml.sap.com/2006/11/esi/esp/binxml" xmlns:saptrnbnd="http://www.sap.com/webas/710/soap/features/transportbinding/" wsp:Optional="true"/>
 				<wsaw:UsingAddressing xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" wsp:Optional="true"/>
 				<wsp:All xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy">
 					<sp:TransportBinding xmlns:sp="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702" xmlns:sapsp="http://www.sap.com/webas/630/soap/features/security/policy" xmlns:wsa="http://www.w3.org/2005/08/addressing" xmlns:wst="http://docs.oasis-open.org/ws-sx/ws-trust/200512" xmlns:wsu="http://schemas.xmlsoap.org/ws/2002/07/utility" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex">
@@ -143,7 +144,17 @@
 			</wsp:All>
 		</wsp:ExactlyOne>
 	</wsp:Policy>
-	<wsp:Policy wsu:Id="OP__ZWsGeocallEsitoAllegati">
+	<wsp:Policy wsu:Id="OP__Z_WS_GEOCALL_ESITO_ALLEG_LISTA">
+		<wsp:ExactlyOne>
+			<wsp:All>
+				<saptrhnw05:required xmlns:saptrhnw05="http://www.sap.com/NW05/soap/features/transaction/">no</saptrhnw05:required>
+				<sapcomhnd:enableCommit xmlns:sapcomhnd="http://www.sap.com/NW05/soap/features/commit/">false</sapcomhnd:enableCommit>
+				<sapblock:enableBlocking xmlns:sapblock="http://www.sap.com/NW05/soap/features/blocking/">true</sapblock:enableBlocking>
+				<saprmnw05:enableWSRM xmlns:saprmnw05="http://www.sap.com/NW05/soap/features/wsrm/">false</saprmnw05:enableWSRM>
+			</wsp:All>
+		</wsp:ExactlyOne>
+	</wsp:Policy>
+	<wsp:Policy wsu:Id="OP__Z_WS_GEOCALL_ESITO_ALLEGATI">
 		<wsp:ExactlyOne>
 			<wsp:All>
 				<saptrhnw05:required xmlns:saptrhnw05="http://www.sap.com/NW05/soap/features/transaction/">no</saptrhnw05:required>
@@ -154,7 +165,7 @@
 		</wsp:ExactlyOne>
 	</wsp:Policy>
 	<wsdl:types>
-		<xsd:schema xmlns:tns="urn:sap-com:document:sap:rfc:functions" attributeFormDefault="qualified" targetNamespace="urn:sap-com:document:sap:rfc:functions">
+		<xsd:schema attributeFormDefault="qualified" targetNamespace="urn:sap-com:document:sap:rfc:functions">
 			<xsd:simpleType name="char1">
 				<xsd:restriction base="xsd:string">
 					<xsd:maxLength value="1"/>
@@ -215,110 +226,147 @@
 			<xsd:simpleType name="string">
 				<xsd:restriction base="xsd:string"/>
 			</xsd:simpleType>
-		</xsd:schema>
-		<xsd:schema xmlns:n0="urn:sap-com:document:sap:rfc:functions" attributeFormDefault="qualified" targetNamespace="urn:sap-com:document:sap:soap:functions:mc-style">
-			<xsd:import namespace="urn:sap-com:document:sap:rfc:functions"/>
-			<xsd:complexType name="ZwfmAllegatoIn">
+			<xsd:complexType name="ZWFM_ALLEGATO_IN">
 				<xsd:sequence>
-					<xsd:element name="TipoAllegato" type="n0:char2"/>
-					<xsd:element name="Progressivo" type="xsd:short"/>
-					<xsd:element name="NomeFileOriginale" type="n0:char60"/>
-					<xsd:element name="NomeFileNormalizzato" type="n0:char60"/>
-					<xsd:element name="Descrizione" type="n0:char60"/>
-					<xsd:element name="Formato" type="n0:char3"/>
-					<xsd:element name="Dimensione" type="xsd:int"/>
-					<xsd:element name="ContFile" type="n0:string"/>
+					<xsd:element name="TIPO_ALLEGATO" type="tns:char2"/>
+					<xsd:element name="PROGRESSIVO" type="xsd:short"/>
+					<xsd:element name="NOME_FILE_ORIGINALE" type="tns:char60"/>
+					<xsd:element name="NOME_FILE_NORMALIZZATO" type="tns:char60"/>
+					<xsd:element name="DESCRIZIONE" type="tns:char60"/>
+					<xsd:element name="FORMATO" type="tns:char3"/>
+					<xsd:element name="DIMENSIONE" type="xsd:int"/>
+					<xsd:element name="CONT_FILE" type="tns:string"/>
 				</xsd:sequence>
 			</xsd:complexType>
-			<xsd:complexType name="Bapireturn1">
+			<xsd:complexType name="BAPIRETURN1">
 				<xsd:sequence>
-					<xsd:element name="Type" type="n0:char1"/>
-					<xsd:element name="Id" type="n0:char20"/>
-					<xsd:element name="Number" type="n0:numeric3"/>
-					<xsd:element name="Message" type="n0:char220"/>
-					<xsd:element name="LogNo" type="n0:char20"/>
-					<xsd:element name="LogMsgNo" type="n0:numeric6"/>
-					<xsd:element name="MessageV1" type="n0:char50"/>
-					<xsd:element name="MessageV2" type="n0:char50"/>
-					<xsd:element name="MessageV3" type="n0:char50"/>
-					<xsd:element name="MessageV4" type="n0:char50"/>
+					<xsd:element name="TYPE" type="tns:char1"/>
+					<xsd:element name="ID" type="tns:char20"/>
+					<xsd:element name="NUMBER" type="tns:numeric3"/>
+					<xsd:element name="MESSAGE" type="tns:char220"/>
+					<xsd:element name="LOG_NO" type="tns:char20"/>
+					<xsd:element name="LOG_MSG_NO" type="tns:numeric6"/>
+					<xsd:element name="MESSAGE_V1" type="tns:char50"/>
+					<xsd:element name="MESSAGE_V2" type="tns:char50"/>
+					<xsd:element name="MESSAGE_V3" type="tns:char50"/>
+					<xsd:element name="MESSAGE_V4" type="tns:char50"/>
 				</xsd:sequence>
 			</xsd:complexType>
-			<xsd:complexType name="TableOfBapireturn1">
+			<xsd:complexType name="TABLE_OF_BAPIRETURN1">
 				<xsd:sequence>
-					<xsd:element name="item" type="tns:Bapireturn1" minOccurs="0" maxOccurs="unbounded"/>
+					<xsd:element name="item" type="tns:BAPIRETURN1" minOccurs="0" maxOccurs="unbounded"/>
 				</xsd:sequence>
 			</xsd:complexType>
-			<xsd:element name="ZWsGeocallEsitoAllegati">
+			<xsd:element name="Z_WS_GEOCALL_ESITO_ALLEGATI">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="Allegato_01" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
-						<xsd:element name="Allegato_02" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
-						<xsd:element name="Allegato_03" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
-						<xsd:element name="Allegato_04" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
-						<xsd:element name="Allegato_05" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
-						<xsd:element name="Allegato_06" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
-						<xsd:element name="Allegato_07" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
-						<xsd:element name="Allegato_08" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
-						<xsd:element name="Allegato_09" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
-						<xsd:element name="Allegato_10" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
-						<xsd:element name="Allegato_11" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
-						<xsd:element name="Allegato_12" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
-						<xsd:element name="Allegato_13" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
-						<xsd:element name="Allegato_14" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
-						<xsd:element name="Allegato_15" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
-						<xsd:element name="Allegato_16" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
-						<xsd:element name="Allegato_17" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
-						<xsd:element name="Allegato_18" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
-						<xsd:element name="Allegato_19" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
-						<xsd:element name="Allegato_20" type="tns:ZwfmAllegatoIn" minOccurs="0"/>
-						<xsd:element name="Externalcode" type="n0:char12"/>
-						<xsd:element name="Notificationnumbersap" type="n0:char12"/>
-						<xsd:element name="TReturn" type="tns:TableOfBapireturn1" minOccurs="0"/>
-						<xsd:element name="TotaleAllegati" type="xsd:short"/>
-						<xsd:element name="Wocode" type="n0:char255" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_01" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_02" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_03" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_04" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_05" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_06" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_07" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_08" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_09" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_10" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_11" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_12" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_13" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_14" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_15" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_16" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_17" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_18" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_19" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_20" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
+						<xsd:element name="EXTERNALCODE" type="tns:char12"/>
+						<xsd:element name="NOTIFICATIONNUMBERSAP" type="tns:char12"/>
+						<xsd:element name="TOTALE_ALLEGATI" type="xsd:short"/>
+						<xsd:element name="T_RETURN" type="tns:TABLE_OF_BAPIRETURN1" minOccurs="0"/>
+						<xsd:element name="WOCODE" type="tns:char255" minOccurs="0"/>
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="ZWsGeocallEsitoAllegatiResponse">
+			<xsd:element name="Z_WS_GEOCALL_ESITO_ALLEGATIResponse">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="TReturn" type="tns:TableOfBapireturn1" minOccurs="0"/>
+						<xsd:element name="T_RETURN" type="tns:TABLE_OF_BAPIRETURN1" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="Z_WS_GEOCALL_ESITO_ALLEG_LISTA">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="EXTERNALCODE" type="tns:char12"/>
+						<xsd:element name="NOTIFICATIONNUMBERSAP" type="tns:char12"/>
+						<xsd:element name="TOTALE_ALLEGATI" type="xsd:short"/>
+						<xsd:element name="T_RETURN" type="tns:TABLE_OF_BAPIRETURN1" minOccurs="0"/>
+						<xsd:element name="WOCODE" type="tns:char255" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="T_RETURN" type="tns:TABLE_OF_BAPIRETURN1" minOccurs="0"/>
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
 		</xsd:schema>
 	</wsdl:types>
-	<wsdl:message name="ZWsGeocallEsitoAllegati">
-		<wsdl:part name="parameters" element="tns:ZWsGeocallEsitoAllegati"/>
+	<wsdl:message name="Z_WS_GEOCALL_ESITO_ALLEGATI">
+		<wsdl:part name="parameters" element="tns:Z_WS_GEOCALL_ESITO_ALLEGATI"/>
 	</wsdl:message>
-	<wsdl:message name="ZWsGeocallEsitoAllegatiResponse">
-		<wsdl:part name="parameter" element="tns:ZWsGeocallEsitoAllegatiResponse"/>
+	<wsdl:message name="Z_WS_GEOCALL_ESITO_ALLEGATIResponse">
+		<wsdl:part name="parameter" element="tns:Z_WS_GEOCALL_ESITO_ALLEGATIResponse"/>
+	</wsdl:message>
+	<wsdl:message name="Z_WS_GEOCALL_ESITO_ALLEG_LISTA">
+		<wsdl:part name="parameters" element="tns:Z_WS_GEOCALL_ESITO_ALLEG_LISTA"/>
+	</wsdl:message>
+	<wsdl:message name="Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse">
+		<wsdl:part name="parameter" element="tns:Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse"/>
 	</wsdl:message>
 	<wsdl:portType name="Z_WFM_GEOCALL_ESITO_ALLEGATI">
 		<wsdl:documentation>
 			<sapdoc:sapdoc xmlns:sapdoc="urn:sap:esi:documentation">
-				<sapdoc:docitem docURL="http://s01sapsvil.prv.vestaspa.net:8010/sap/bc/esdt/docu/sd_text?sap-client=300"/>
+				<sapdoc:docitem docURL="http://s01sapsvil.prv.vestaspa.net:8010/sap/bc/esdt/docu/sd_text?sap-client=300&amp;sd_name=Z_WFM_GEOCALL_ESITO_ALLEGATI"/>
 			</sapdoc:sapdoc>
 		</wsdl:documentation>
 		<wsp:Policy>
 			<wsp:PolicyReference URI="#IF__Z_WFM_GEOCALL_ESITO_ALLEGATI"/>
 		</wsp:Policy>
-		<wsdl:operation name="ZWsGeocallEsitoAllegati">
+		<wsdl:operation name="Z_WS_GEOCALL_ESITO_ALLEGATI">
 			<wsp:Policy>
-				<wsp:PolicyReference URI="#OP__ZWsGeocallEsitoAllegati"/>
+				<wsp:PolicyReference URI="#OP__Z_WS_GEOCALL_ESITO_ALLEGATI"/>
 			</wsp:Policy>
-			<wsdl:input message="tns:ZWsGeocallEsitoAllegati"/>
-			<wsdl:output message="tns:ZWsGeocallEsitoAllegatiResponse"/>
+			<wsdl:input message="tns:Z_WS_GEOCALL_ESITO_ALLEGATI"/>
+			<wsdl:output message="tns:Z_WS_GEOCALL_ESITO_ALLEGATIResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="Z_WS_GEOCALL_ESITO_ALLEG_LISTA">
+			<wsp:Policy>
+				<wsp:PolicyReference URI="#OP__Z_WS_GEOCALL_ESITO_ALLEG_LISTA"/>
+			</wsp:Policy>
+			<wsdl:input message="tns:Z_WS_GEOCALL_ESITO_ALLEG_LISTA"/>
+			<wsdl:output message="tns:Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse"/>
 		</wsdl:operation>
 	</wsdl:portType>
-	<wsdl:binding name="ZWFM_GEOCALL_ESITO_ALLEGATI" type="tns:Z_WFM_GEOCALL_ESITO_ALLEGATI">
+	<wsdl:binding name="Z_WFM_GEOCALL_ESITO_ALLEGATI" type="tns:Z_WFM_GEOCALL_ESITO_ALLEGATI">
 		<wsp:Policy>
-			<wsp:PolicyReference URI="#BN__ZWFM_GEOCALL_ESITO_ALLEGATI"/>
+			<wsp:PolicyReference URI="#BN__Z_WFM_GEOCALL_ESITO_ALLEGATI"/>
 		</wsp:Policy>
 		<soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
-		<wsdl:operation name="ZWsGeocallEsitoAllegati">
-			<soap:operation soapAction="urn:sap-com:document:sap:soap:functions:mc-style:Z_WFM_GEOCALL_ESITO_ALLEGATI:ZWsGeocallEsitoAllegatiRequest" style="document"/>
+		<wsdl:operation name="Z_WS_GEOCALL_ESITO_ALLEGATI">
+			<soap:operation soapAction="urn:sap-com:document:sap:rfc:functions:Z_WFM_GEOCALL_ESITO_ALLEGATI:Z_WS_GEOCALL_ESITO_ALLEGATIRequest" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="Z_WS_GEOCALL_ESITO_ALLEG_LISTA">
+			<soap:operation soapAction="urn:sap-com:document:sap:rfc:functions:Z_WFM_GEOCALL_ESITO_ALLEGATI:Z_WS_GEOCALL_ESITO_ALLEG_LISTARequest" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal"/>
 			</wsdl:input>
@@ -327,13 +375,22 @@
 			</wsdl:output>
 		</wsdl:operation>
 	</wsdl:binding>
-	<wsdl:binding name="ZWFM_GEOCALL_ESITO_ALLEGATI_soap12" type="tns:Z_WFM_GEOCALL_ESITO_ALLEGATI">
+	<wsdl:binding name="Z_WFM_GEOCALL_ESITO_ALLEGATI_soap12" type="tns:Z_WFM_GEOCALL_ESITO_ALLEGATI">
 		<wsp:Policy>
-			<wsp:PolicyReference URI="#BN__ZWFM_GEOCALL_ESITO_ALLEGATI_soap12"/>
+			<wsp:PolicyReference URI="#BN__Z_WFM_GEOCALL_ESITO_ALLEGATI_soap12"/>
 		</wsp:Policy>
 		<wsoap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
-		<wsdl:operation name="ZWsGeocallEsitoAllegati">
-			<wsoap12:operation soapAction="urn:sap-com:document:sap:soap:functions:mc-style:Z_WFM_GEOCALL_ESITO_ALLEGATI:ZWsGeocallEsitoAllegatiRequest" style="document"/>
+		<wsdl:operation name="Z_WS_GEOCALL_ESITO_ALLEGATI">
+			<wsoap12:operation soapAction="urn:sap-com:document:sap:rfc:functions:Z_WFM_GEOCALL_ESITO_ALLEGATI:Z_WS_GEOCALL_ESITO_ALLEGATIRequest" style="document"/>
+			<wsdl:input>
+				<wsoap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<wsoap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="Z_WS_GEOCALL_ESITO_ALLEG_LISTA">
+			<wsoap12:operation soapAction="urn:sap-com:document:sap:rfc:functions:Z_WFM_GEOCALL_ESITO_ALLEGATI:Z_WS_GEOCALL_ESITO_ALLEG_LISTARequest" style="document"/>
 			<wsdl:input>
 				<wsoap12:body use="literal"/>
 			</wsdl:input>
@@ -342,12 +399,12 @@
 			</wsdl:output>
 		</wsdl:operation>
 	</wsdl:binding>
-	<wsdl:service name="ZWFM_GEOCALL_ESITO_ALLEGATI">
-		<wsdl:port name="ZWFM_GEOCALL_ESITO_ALLEGATI" binding="tns:ZWFM_GEOCALL_ESITO_ALLEGATI">
-			<soap:address location="https://s01sapsvil.prv.vestaspa.net:44310/sap/bc/srt/rfc/sap/z_wfm_geocall_esito_allegati/300/zwfm_geocall_esito_allegati/zwfm_geocall_esito_allegati"/>
+	<wsdl:service name="Z_WFM_GEOCALL_ESITO_ALLEGATI">
+		<wsdl:port name="Z_WFM_GEOCALL_ESITO_ALLEGATI" binding="tns:Z_WFM_GEOCALL_ESITO_ALLEGATI">
+			<soap:address location="https://s01sapsvil.prv.vestaspa.net:44310/sap/bc/srt/rfc/sap/z_wfm_geocall_esito_allegati/300/z_wfm_geocall_esito_allegati/z_wfm_geocall_esito_allegati"/>
 		</wsdl:port>
-		<wsdl:port name="ZWFM_GEOCALL_ESITO_ALLEGATI_soap12" binding="tns:ZWFM_GEOCALL_ESITO_ALLEGATI_soap12">
-			<wsoap12:address location="https://s01sapsvil.prv.vestaspa.net:44310/sap/bc/srt/rfc/sap/z_wfm_geocall_esito_allegati/300/zwfm_geocall_esito_allegati/zwfm_geocall_esito_allegati"/>
+		<wsdl:port name="Z_WFM_GEOCALL_ESITO_ALLEGATI_soap12" binding="tns:Z_WFM_GEOCALL_ESITO_ALLEGATI_soap12">
+			<wsoap12:address location="https://s01sapsvil.prv.vestaspa.net:44310/sap/bc/srt/rfc/sap/z_wfm_geocall_esito_allegati/300/z_wfm_geocall_esito_allegati/z_wfm_geocall_esito_allegati"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>

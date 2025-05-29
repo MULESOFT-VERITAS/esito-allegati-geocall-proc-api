@@ -22,13 +22,13 @@ payload]]></ee:set-variable>
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
 output application/xml
-ns ns2 urn:sap-com:document:sap:soap:functions:mc-style
+ns urn urn:sap-com:document:sap:soap:functions:mc-style
 ---
-ns2#ZWsGeocallEsitoAllegati: {
-  Externalcode: vars.savePratica.externalCode,
-  Notificationnumbersap: vars.savePratica.notificationNumberSap,
-  TotaleAllegati: vars.countAllegati,
-  Wocode: vars.savePratica.wocode
+urn#Z_WS_GEOCALL_ESITO_ALLEG_LISTA: {
+  EXTERNALCODE: vars.savePratica.externalCode,
+  NOTIFICATIONNUMBERSAP: vars.savePratica.notificationNumberSap,
+  TOTALE_ALLEGATI: vars.countAllegati,
+  WOCODE: vars.savePratica.wocode
   
 }
 ]]></ee:set-payload>

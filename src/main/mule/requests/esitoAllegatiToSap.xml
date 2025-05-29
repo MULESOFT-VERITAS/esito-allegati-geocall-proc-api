@@ -7,33 +7,34 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd">
 
 	<sub-flow name="esitoAllegatiToSapCallSub" doc:id="6c8c2254-d194-4fb9-934d-0b7d8f164b17" >
-		<ee:transform doc:name="Input" doc:id="2eadd79f-b7c8-44c2-a8db-d9638854183d" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+		<ee:transform doc:name="Input" doc:id="2eadd79f-b7c8-44c2-a8db-d9638854183d">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
 output application/xml
-ns ns2 urn:sap-com:document:sap:soap:functions:mc-style
+ns urn urn:sap-com:document:sap:soap:functions:mc-style
 ---
-ns2#ZWsGeocallEsitoAllegati: {
-  Allegato_01: {
-    TipoAllegato: payload.tipoAllegato,
-    Progressivo: vars.counter,
-    NomeFileOriginale: payload.nomeFileOriginale,
-    NomeFileNormalizzato: payload.nomeFileNormalizzato,
-    Descrizione: payload.descrizione,
-    Formato: payload.formato,
-    Dimensione: payload.dimensione,
-    ContFile: vars.attachmentGeoCall.contFile
+urn#Z_WS_GEOCALL_ESITO_ALLEGATI: {
+  ALLEGATO_01: {
+    TIPO_ALLEGATO: payload.tipoAllegato,
+    PROGRESSIVO: vars.counter,
+    NOME_FILE_ORIGINALE: payload.nomeFileOriginale,
+    NOME_FILE_NORMALIZZATO: payload.nomeFileNormalizzato,
+    DESCRIZIONE: payload.descrizione,
+    FORMATO: payload.formato,
+    DIMENSIONE: payload.dimensione,
+    CONT_FILE: vars.attachmentGeoCall.contFile
   },
-  Externalcode: vars.savePratica.externalCode,
-  Notificationnumbersap: vars.savePratica.notificationNumberSap,
-  TotaleAllegati: vars.countAllegati
+  EXTERNALCODE: vars.savePratica.externalCode,
+  NOTIFICATIONNUMBERSAP: vars.savePratica.notificationNumberSap,
+  TOTALE_ALLEGATI: vars.countAllegati,
+  WOCODE: vars.savePratica.wocode
   
 }
 ]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="START" doc:id="dc37b983-ec6d-43fe-95e8-4e4886953805" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;START esitoAllegati to SAP&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: vars.correlationId default correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: write(logPayload,&quot;application/xml&quot;)) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
-		<!-- [STUDIO:"Consume"]<wsc:consume doc:id="354fd2b1-f1d8-444d-848f-969864e818f3" config-ref="Web_Service_Consumer_Config" operation="ZWsGeocallEsitoAllegati"/> [STUDIO] -->
+		<wsc:consume doc:id="354fd2b1-f1d8-444d-848f-969864e818f3" config-ref="Web_Service_Consumer_Config" operation="Z_WS_GEOCALL_ESITO_ALLEGATI"/>
 		<logger level="INFO" doc:name="END" doc:id="31bd5d54-5f53-4d4c-851d-320ee0aa6975" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;END esitoAllegati from SAP&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: vars.correlationId default correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
 	</sub-flow>
 </mule>
