@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+<mule xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd">
 	<error-handler name="Apikit_Error_Handler" doc:id="b08a01a3-6844-4ac6-8c76-f81445af7aef">
 	<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="9bdff357-538b-4703-8667-f19d1992490b" when="#[(error.errorType.namespace == 'APIKIT') or (error.errorType.identifier contains 'APIKIT')]">
 			<ee:transform doc:name="httpStatus" doc:id="030b4031-75f0-4fc5-9f84-9426d570922f">
@@ -181,7 +182,46 @@ ErrorMapper::error(
 				<ee:set-variable variableName="error-already-logged"><![CDATA["error-already-handled"]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<logger level="INFO" doc:name="Logger error" doc:id="63ba12fe-6d0a-4135-bb49-73c9cebfb52b" message='#[import mergeWith from dw::core::Objects&#10;output json &#10;---&#10; payload  mergeWith {&#10;	("childErrors": error.childErrors)if(!isEmpty(error.childErrors)),&#10;    "falingComponent": error.failingComponent,&#10;  	 correlationId: vars.correlationId default correlationId&#10;}]' />
+		<logger level="ERROR" doc:name="Logger error" doc:id="63ba12fe-6d0a-4135-bb49-73c9cebfb52b" message='#[import mergeWith from dw::core::Objects&#10;output json &#10;---&#10; payload  mergeWith {&#10;	("childErrors": error.childErrors)if(!isEmpty(error.childErrors)),&#10;    "falingComponent": error.failingComponent,&#10;  	 correlationId: vars.correlationId default correlationId&#10;}]' />
+		<choice doc:name="Choice" doc:id="1743034a-b6d0-4f3a-aaab-d57c3bf89674" >
+			<when expression="#[vars.mqSub != null]">
+				<choice doc:name="Choice" doc:id="5e00f4d7-dda6-43a4-b6e8-44aab8a85a22">
+			<when expression="#[vars.retryCount &lt;= 3]">
+				<anypoint-mq:publish doc:name="Publish" doc:id="cbb8c1f3-b23e-4e5b-9f32-9946509b8601" config-ref="Anypoint_MQ_Config" destination="${mq.esito-allegati}">
+					<reconnect frequency="${mq.frequency}" count="${mq.reconnection}" />
+					<anypoint-mq:body><![CDATA[#[output application/json
+---
+{
+	pratica: vars.savePratica,
+	listaAllegati: [vars.saveCurrentLista]
+}]]]></anypoint-mq:body>
+					<anypoint-mq:properties><![CDATA[#[{
+	corrlationId: vars.correlationId,
+	retryCount: (vars.retryCount as Number) + 1
+}]]]></anypoint-mq:properties>
+				</anypoint-mq:publish>
+			</when>
+			<otherwise>
+				<anypoint-mq:publish doc:name="PublishDLQ" doc:id="bbc8370b-baaa-4d04-9d9c-80def2ea918a" config-ref="Anypoint_MQ_Config" destination="${mq.esito-allegati-dlq}">
+					<reconnect frequency="${mq.frequency}" count="${mq.reconnection}" />
+					<anypoint-mq:body><![CDATA[#[output application/json
+---
+{
+	pratica: vars.savePratica,
+	listaAllegati: [vars.saveCurrentLista]
+}]]]></anypoint-mq:body>
+					<anypoint-mq:properties><![CDATA[#[{
+	corrlationId: vars.correlationId,
+	retryCount: vars.retryCount
+}]]]></anypoint-mq:properties>
+				</anypoint-mq:publish>
+			</otherwise>
+		</choice>
+			</when>
+			<otherwise >
+				<logger level="ERROR" doc:name="Logger" doc:id="a6ef8406-5d7e-4c72-bf90-a04eba324939" message="Not MQ"/>
+			</otherwise>
+		</choice>
 	</sub-flow>
 	<sub-flow name="CommonErrorMsgTemplateWsc" doc:id="1b9645cd-e422-45a4-9278-41f8ddad4453" >
 		<ee:transform doc:name="error" doc:id="a4176eb2-aef5-4290-af04-c968720ef3fe" >
@@ -208,7 +248,46 @@ output application/json
 				<ee:set-variable variableName="error-already-logged" ><![CDATA["error-already-handled"]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<logger level="INFO" doc:name="Logger error" doc:id="02af8d20-773a-43c4-8ab2-ff4b167ae730" message='#[import mergeWith from dw::core::Objects&#10;output json &#10;---&#10; payload  mergeWith {&#10;	("childErrors": error.childErrors)if(!isEmpty(error.childErrors)),&#10;    "falingComponent": error.failingComponent,&#10;  	 correlationId: vars.correlationId default correlationId&#10;}]' />
+		<logger level="ERROR" doc:name="Logger error" doc:id="02af8d20-773a-43c4-8ab2-ff4b167ae730" message='#[import mergeWith from dw::core::Objects&#10;output json &#10;---&#10; payload  mergeWith {&#10;	("childErrors": error.childErrors)if(!isEmpty(error.childErrors)),&#10;    "falingComponent": error.failingComponent,&#10;  	 correlationId: vars.correlationId default correlationId&#10;}]' />
+		<choice doc:name="Choice" doc:id="6832a8b5-91e2-4972-bc76-d65eb93d4a66" >
+			<when expression="#[vars.mqSub != null]">
+				<choice doc:name="Choice" doc:id="659dd40a-431c-47aa-8dc7-6a66ee3a484d">
+			<when expression="#[vars.retryCount &lt;= 3]">
+				<anypoint-mq:publish doc:name="Publish" doc:id="701375f9-26b1-4330-a898-24c1e54ad5c9" config-ref="Anypoint_MQ_Config" destination="${mq.esito-allegati}">
+					<reconnect frequency="${mq.frequency}" count="${mq.reconnection}" />
+					<anypoint-mq:body><![CDATA[#[output application/json
+---
+{
+	pratica: vars.savePratica,
+	listaAllegati: [vars.saveCurrentLista]
+}]]]></anypoint-mq:body>
+					<anypoint-mq:properties><![CDATA[#[{
+	corrlationId: vars.correlationId,
+	retryCount: (vars.retryCount as Number) + 1
+}]]]></anypoint-mq:properties>
+				</anypoint-mq:publish>
+			</when>
+			<otherwise>
+				<anypoint-mq:publish doc:name="PublishDLQ" doc:id="890f93c5-e6b6-4ae1-b75b-cef45298bc83" config-ref="Anypoint_MQ_Config" destination="${mq.esito-allegati-dlq}">
+					<reconnect frequency="${mq.frequency}" count="${mq.reconnection}" />
+					<anypoint-mq:body><![CDATA[#[output application/json
+---
+{
+	pratica: vars.savePratica,
+	listaAllegati: [vars.saveCurrentLista]
+}]]]></anypoint-mq:body>
+					<anypoint-mq:properties><![CDATA[#[{
+	corrlationId: vars.correlationId,
+	retryCount: vars.retryCount
+}]]]></anypoint-mq:properties>
+				</anypoint-mq:publish>
+			</otherwise>
+		</choice>
+			</when>
+			<otherwise >
+				<logger level="ERROR" doc:name="Logger" doc:id="8f3ec8ab-cb5e-4eb3-aa0f-b05663947037" message="Not MQ"/>
+			</otherwise>
+		</choice>
 	</sub-flow>
 	
 </mule>

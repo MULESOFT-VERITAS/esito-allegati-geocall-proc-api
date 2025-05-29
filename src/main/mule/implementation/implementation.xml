@@ -22,7 +22,8 @@ payload]]></ee:set-variable>
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
 output application/xml
-ns urn urn:sap-com:document:sap:soap:functions:mc-style
+ns urn urn:sap-com:document:sap:rfc:functions
+
 ---
 urn#Z_WS_GEOCALL_ESITO_ALLEG_LISTA: {
   EXTERNALCODE: vars.savePratica.externalCode,
@@ -61,9 +62,18 @@ output application/json
 			<ee:variables >
 				<ee:set-variable variableName="savePratica" ><![CDATA[payload.pratica]]></ee:set-variable>
 				<ee:set-variable variableName="countAllegati" ><![CDATA[sizeOf(payload.listaAllegati)]]></ee:set-variable>
+				<ee:set-variable variableName="retryCount" ><![CDATA[if(!isEmpty(attributes.properties.retryCount)) attributes.properties.retryCount else 1]]></ee:set-variable>
+				<ee:set-variable variableName="mqSub" ><![CDATA[true]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<foreach doc:name="For Each" doc:id="e8fb82c9-0820-4a23-98c3-6339d7700653" collection="#[payload.listaAllegati]">
+			<ee:transform doc:name="saveCurrentListaAllegati" doc:id="77e5ea8e-13ff-45fe-9dca-4857a4f9cd6c" >
+				<ee:message >
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="saveCurrentLista" ><![CDATA[payload]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
 			<flow-ref doc:name="getAttachFromGeoCallSub" doc:id="9244ea6d-d185-454e-ab90-934ccf338477" name="getAttachFromGeoCallSub" target="attachmentGeocall" />
 			<flow-ref doc:name="esitoAllegatiToSapCallSub" doc:id="d33ae757-ec6a-4366-bcb0-9f0395aea277" name="esitoAllegatiToSapCallSub" />
 		</foreach>

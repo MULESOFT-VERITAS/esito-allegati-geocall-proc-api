@@ -968,4 +968,6 @@ type: string]]></types:shape>
       </types:input-event>
     </types:processor-declaration>
   </types:enrichment>
+  <types:enrichment select="#77e5ea8e-13ff-45fe-9dca-4857a4f9cd6c"/>
+  <types:enrichment select="#438e3ee3-8e08-46be-8468-b4398a6da7bd"/>
 </types:mule>
