@@ -199,7 +199,7 @@ output application/json
   "timestamp": now() as LocalDateTime,
   "infoMessage": {
     "errorCode": vars.httpStatus,
-    "errorDescription": "Errore invocazione al webservice",
+    "errorDescription": error.description,
     "errorOn": p('app.name'),
     "errorType": error.errorType.identifier
   }
