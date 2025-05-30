@@ -35,7 +35,7 @@ urn#Z_WS_GEOCALL_ESITO_ALLEG_LISTA: {
 ]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<flow-ref doc:name="sendListaAllegatiToSapCallSub" doc:id="599fe60b-bf4c-4672-be6d-e5d0549e7885" name="sendListaAllegatiToSapCallSub" />
+		<!-- [STUDIO:"sendListaAllegatiToSapCallSub"]<flow-ref doc:name="sendListaAllegatiToSapCallSub" doc:id="599fe60b-bf4c-4672-be6d-e5d0549e7885" name="sendListaAllegatiToSapCallSub" /> [STUDIO] -->
 		<anypoint-mq:publish doc:name="Publish" doc:id="2381d01f-861a-485e-9fba-2d37646d8924" config-ref="Anypoint_MQ_Config" destination="${mq.esito-allegati}">
 			<reconnect frequency="${mq.frequency}" count="${mq.reconnection}" />
 			<anypoint-mq:body><![CDATA[#[vars.savePayload]]]></anypoint-mq:body>
@@ -62,20 +62,58 @@ output application/json
 			<ee:variables >
 				<ee:set-variable variableName="savePratica" ><![CDATA[payload.pratica]]></ee:set-variable>
 				<ee:set-variable variableName="countAllegati" ><![CDATA[sizeOf(payload.listaAllegati)]]></ee:set-variable>
-				<ee:set-variable variableName="retryCount" ><![CDATA[if(!isEmpty(attributes.properties.retryCount)) attributes.properties.retryCount else 1]]></ee:set-variable>
-				<ee:set-variable variableName="mqSub" ><![CDATA[true]]></ee:set-variable>
+				<ee:set-variable variableName="retryCount" ><![CDATA[attributes.properties.retryCount]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<foreach doc:name="For Each" doc:id="e8fb82c9-0820-4a23-98c3-6339d7700653" collection="#[payload.listaAllegati]">
-			<ee:transform doc:name="saveCurrentListaAllegati" doc:id="77e5ea8e-13ff-45fe-9dca-4857a4f9cd6c" >
-				<ee:message >
+			<ee:transform doc:name="saveCurrentListaAllegati" doc:id="77e5ea8e-13ff-45fe-9dca-4857a4f9cd6c">
+				<ee:message>
 				</ee:message>
-				<ee:variables >
-					<ee:set-variable variableName="saveCurrentLista" ><![CDATA[payload]]></ee:set-variable>
+				<ee:variables>
+					<ee:set-variable variableName="saveCurrentLista"><![CDATA[payload]]></ee:set-variable>
+					<ee:set-variable variableName="retryCount" ><![CDATA[if(!isEmpty(vars.retryCount)) vars.retryCount else 1]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
-			<flow-ref doc:name="getAttachFromGeoCallSub" doc:id="9244ea6d-d185-454e-ab90-934ccf338477" name="getAttachFromGeoCallSub" target="attachmentGeocall" />
-			<flow-ref doc:name="esitoAllegatiToSapCallSub" doc:id="d33ae757-ec6a-4366-bcb0-9f0395aea277" name="esitoAllegatiToSapCallSub" />
+				<try doc:name="Try" doc:id="a3f6f6bd-5e06-40fb-b996-f2eb5989221e">
+					<flow-ref doc:name="getAttachFromGeoCallSub" doc:id="9244ea6d-d185-454e-ab90-934ccf338477" name="getAttachFromGeoCallSub" target="attachmentGeocall" />
+					<flow-ref doc:name="esitoAllegatiToSapCallSub" doc:id="d33ae757-ec6a-4366-bcb0-9f0395aea277" name="esitoAllegatiToSapCallSub" />
+					<error-handler>
+						<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="a3093d02-0e94-45fc-b4b0-c5383d6ae101">
+					<choice doc:name="Choice" doc:id="e144139f-fa67-4d07-a5ef-944fb20a7e4e">
+						<when expression="#[vars.retryCount &lt;= 3]">
+							<anypoint-mq:publish doc:name="Publish" doc:id="0e3cd45b-48a0-4958-bfe1-233b7cfea231" config-ref="Anypoint_MQ_Config" destination="${mq.esito-allegati}">
+								<reconnect frequency="${mq.frequency}" count="${mq.reconnection}" />
+								<anypoint-mq:body><![CDATA[#[output application/json
+---
+{
+	pratica: vars.savePratica,
+	listaAllegati: [vars.saveCurrentLista]
+}]]]></anypoint-mq:body>
+								<anypoint-mq:properties><![CDATA[#[{
+	corrlationId: vars.correlationId,
+	retryCount: (vars.retryCount as Number) + 1
+}]]]></anypoint-mq:properties>
+							</anypoint-mq:publish>
+						</when>
+						<otherwise>
+							<anypoint-mq:publish doc:name="PublishDLQ" doc:id="0c787182-f540-4864-8c98-2f400d64393f" config-ref="Anypoint_MQ_Config" destination="${mq.esito-allegati-dlq}">
+								<reconnect frequency="${mq.frequency}" count="${mq.reconnection}" />
+								<anypoint-mq:body><![CDATA[#[output application/json
+---
+{
+	pratica: vars.savePratica,
+	listaAllegati: [vars.saveCurrentLista]
+}]]]></anypoint-mq:body>
+								<anypoint-mq:properties><![CDATA[#[{
+	corrlationId: vars.correlationId,
+	retryCount: vars.retryCount
+}]]]></anypoint-mq:properties>
+							</anypoint-mq:publish>
+						</otherwise>
+					</choice>
+				</on-error-continue>
+					</error-handler>
+				</try>
 		</foreach>
 	</sub-flow>
 	<sub-flow name="hello-implementation" doc:id="184f5c0b-cda3-406d-a7a7-6b873494239f" >
