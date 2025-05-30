@@ -2,3 +2,5 @@ sap:
   password: "![TkBZqfgu9PnOO6nBd/m5djKB3K6JVc0e5UbaY4fyPtMzqJQMhfuzZw==]"
 mq:
   client_secret: "![A2wRXwzLZZ0Op/POjFNU8ta/3fmtm8EuHWLHVarsCG7s4bf/4H+DTg==]"
+nextGen:
+  api-key: "![qnfs+AoclL7Ci3Chq1fHvx4BZ1drDIRxzumObDQorAs/+qF6RuBom/jVv1b+tegVgmQlYhv8VNHOyPyv5OcKqQ==]"

@@ -90,5 +90,8 @@ http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/m
 	<anypoint-mq:config name="Anypoint_MQ_Config" doc:name="Anypoint MQ Config" doc:id="9f3861e5-0c54-4a53-b700-bc0dd43ae2da" >
 		<anypoint-mq:connection url="${mq.host}" clientId="${mq.client_id}" clientSecret="${secure::mq.client_secret}" />
 	</anypoint-mq:config>
+ 	<http:request-config name="HttpNextGenRequestConfig" doc:name="HTTPRequestconfiguration" doc:id="d85260c1-172d-4ace-b535-7bf4d0256de4" basePath="${nextGen.basePath}" sendCorrelationId="ALWAYS" responseTimeout="${nextGen.responseTimeout}">
+		<http:request-connection host="${nextGen.host}" port="${nextGen.port}" connectionIdleTimeout="${nextGen.connectionIdleTimeout}" protocol="${nextGen.protocol}"/>
+	</http:request-config>
 
 </mule>
