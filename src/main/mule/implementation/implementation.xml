@@ -35,7 +35,7 @@ urn#Z_WS_GEOCALL_ESITO_ALLEG_LISTA: {
 ]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<!-- [STUDIO:"sendListaAllegatiToSapCallSub"]<flow-ref doc:name="sendListaAllegatiToSapCallSub" doc:id="599fe60b-bf4c-4672-be6d-e5d0549e7885" name="sendListaAllegatiToSapCallSub" /> [STUDIO] -->
+		<flow-ref doc:name="sendListaAllegatiToSapCallSub" doc:id="599fe60b-bf4c-4672-be6d-e5d0549e7885" name="sendListaAllegatiToSapCallSub" />
 		<anypoint-mq:publish doc:name="Publish" doc:id="2381d01f-861a-485e-9fba-2d37646d8924" config-ref="Anypoint_MQ_Config" destination="${mq.esito-allegati}">
 			<reconnect frequency="${mq.frequency}" count="${mq.reconnection}" />
 			<anypoint-mq:body><![CDATA[#[vars.savePayload]]]></anypoint-mq:body>
