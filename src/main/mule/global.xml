@@ -74,7 +74,7 @@ http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/m
 		</http:request-connection>
 	</http:request-config>	
 	<wsc:config name="Web_Service_Consumer_Config" doc:name="Web Service Consumer Config" doc:id="786354d5-fd29-45df-af80-3a018481368d" >
-		<wsc:connection wsdlLocation="externalCalls\ZWFM_GEOCALL_ESITO_ALLEGATI.wsdl" service="Z_WFM_GEOCALL_ESITO_ALLEGATI" port="Z_WFM_GEOCALL_ESITO_ALLEGATI" address="${sap.address}" >
+		<wsc:connection wsdlLocation="externalCalls\zwfm_geocall_esito_allegati.wsdl" service="Z_WFM_GEOCALL_ESITO_ALLEGATI" port="Z_WFM_GEOCALL_ESITO_ALLEGATI" address="${sap.address}" >
 			<reconnection >
 				<reconnect frequency="${http.frequency}" count="${http.reconnection}" />
 			</reconnection>
