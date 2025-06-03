@@ -27,6 +27,7 @@ urn#Z_WS_GEOCALL_ESITO_ALLEGATI: {
   EXTERNALCODE: vars.savePratica.externalCode,
   NOTIFICATIONNUMBERSAP: vars.savePratica.notificationNumberSap,
   TOTALE_ALLEGATI: vars.countAllegati,
+  T_RETURN: "",
   WOCODE: vars.savePratica.wocode
   
 }
@@ -35,6 +36,25 @@ urn#Z_WS_GEOCALL_ESITO_ALLEGATI: {
 		</ee:transform>
 		<logger level="INFO" doc:name="START" doc:id="dc37b983-ec6d-43fe-95e8-4e4886953805" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;START esitoAllegati to SAP&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: vars.correlationId default correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: write(logPayload,&quot;application/xml&quot;)) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
 		<wsc:consume doc:id="354fd2b1-f1d8-444d-848f-969864e818f3" config-ref="Web_Service_Consumer_Config" operation="Z_WS_GEOCALL_ESITO_ALLEGATI" doc:name="Z_WS_GEOCALL_ESITO_ALLEGATI"/>
-		<logger level="INFO" doc:name="END" doc:id="31bd5d54-5f53-4d4c-851d-320ee0aa6975" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;END esitoAllegati from SAP&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: vars.correlationId default correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: write(logPayload.body,&quot;application/xml&quot;)) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
+		<ee:transform doc:name="output" doc:id="296393cb-b4b0-4eaa-b1b6-f9b5843ca60d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns n0 urn:sap-com:document:sap:rfc:functions
+
+var itemsRaw = payload.body.n0#Z_WS_GEOCALL_ESITO_ALLEGATIResponse.T_RETURN.item
+var items = if (typeOf(itemsRaw) == "Array") itemsRaw else [itemsRaw]
+
+var firstItem = items[0]
+---
+n0#Z_WS_GEOCALL_ESITO_ALLEGATIResponse: {
+  T_RETURN: {
+    item: firstItem
+  }
+}
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="END" doc:id="31bd5d54-5f53-4d4c-851d-320ee0aa6975" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;END esitoAllegati from SAP&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: vars.correlationId default correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: write(logPayload,&quot;application/xml&quot;)) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
 	</sub-flow>
 </mule>

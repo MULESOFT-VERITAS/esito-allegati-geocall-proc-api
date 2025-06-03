@@ -18,23 +18,6 @@ output application/json
 payload]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<ee:transform doc:name="Input" doc:id="911d1783-b49a-485c-ac11-179656b5dc48">
-			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
-output application/xml
-ns urn urn:sap-com:document:sap:rfc:functions
-
----
-urn#Z_WS_GEOCALL_ESITO_ALLEG_LISTA: {
-  EXTERNALCODE: vars.savePratica.externalCode,
-  NOTIFICATIONNUMBERSAP: vars.savePratica.notificationNumberSap,
-  TOTALE_ALLEGATI: vars.countAllegati,
-  WOCODE: vars.savePratica.wocode
-  
-}
-]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
 		<flow-ref doc:name="sendListaAllegatiToSapCallSub" doc:id="599fe60b-bf4c-4672-be6d-e5d0549e7885" name="sendListaAllegatiToSapCallSub" />
 		<anypoint-mq:publish doc:name="Publish" doc:id="2381d01f-861a-485e-9fba-2d37646d8924" config-ref="Anypoint_MQ_Config" destination="${mq.esito-allegati}">
 			<reconnect frequency="${mq.frequency}" count="${mq.reconnection}" />
