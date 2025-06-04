@@ -13,26 +13,28 @@ http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/m
             </http:error-response>
         </http:listener>
         <set-variable value="#[attributes.headers.'x-correlation-id' default correlationId]" doc:name="correlationId" doc:id="0b26ba0a-425d-476e-b9a6-a33744f0dce3" variableName="correlationId" />
+		<logger level="INFO" doc:name="START" doc:id="ef3c9f6a-3ac7-4393-831d-acf4824bc91a" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;START Geocall Esito Allegati&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
 		<apikit:router config-ref="esito-allegati-geocall-proc-config" />
         <error-handler ref="Apikit_Error_Handler" />
     </flow>
 	<flow name="post:\v1\esito\allegati:application\json:esito-allegati-geocall-proc-config" doc:id="bd26fd39-89a6-4057-ad26-5f29016bfc61">
-		<logger level="INFO" doc:name="START" doc:id="ef3c9f6a-3ac7-4393-831d-acf4824bc91a" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;START Geocall Esito Allegati&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
 		<flow-ref doc:name="SendListaAllegatiImpl" doc:id="e2d6a524-2c8f-4c92-89fe-28fd237c7484" name="SendListaAllegatiImpl" />
 		<logger level="INFO" doc:name="END" doc:id="d9d9044d-bd1b-4aa6-9c16-2894459c3ea1" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;END Geocall Esito Allegati&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
 		<error-handler ref="Global_Error_Handler" />
 	</flow>
 	<flow name="esito-allegati-geocall-proc-sub" doc:id="35067412-781d-48a4-9d90-37e55aab8648" >
-		<anypoint-mq:subscriber doc:name="Subscriber" doc:id="f50ca782-f42b-4d03-ba24-9853baf89e5f" config-ref="Anypoint_MQ_Config" destination="${mq.esito-allegati}" acknowledgementMode="IMMEDIATE">
+		<anypoint-mq:subscriber doc:name="Subscriber" doc:id="f50ca782-f42b-4d03-ba24-9853baf89e5f" config-ref="Anypoint_MQ_Config" destination="${mq.esito-allegati}" acknowledgementMode="MANUAL" circuitBreaker="Circuit_breaker">
 			<reconnect frequency="${mq.frequency}" count="${mq.reconnection}" />
 			<anypoint-mq:subscriber-type >
 				<anypoint-mq:prefetch maxLocalMessages="${mq.max-local-message}" />
 			</anypoint-mq:subscriber-type>
 		</anypoint-mq:subscriber>
+		<set-variable value="#[attributes.ackToken]" doc:name="ackToken" doc:id="ba6debcb-f99f-4753-986d-7af1b6b0ceec" variableName="ackToken"/>
 		<set-variable value="#[attributes.properties.corrlationId default correlationId]" doc:name="correlationId" doc:id="03003dbf-9131-4894-8d91-9b2da016c484" variableName="correlationId" />
 		<logger level="INFO" doc:name="START" doc:id="ab1fd581-2cd3-4d45-802f-823fe0251590" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;START Geocall Esito Allegati SUB&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: vars.correlationId default correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
 		<flow-ref doc:name="EsitoGeoCallAllegatiImpl" doc:id="7f4fcee9-9042-4da9-aa08-5132623fe3e1" name="EsitoGeoCallAllegatiImpl" />
 		<logger level="INFO" doc:name="END" doc:id="5569e041-5770-4911-83ff-467f3269e7ac" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;END Geocall Esito Allegati SUB&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: vars.correlationId default correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
+		<anypoint-mq:ack doc:name="Ack" doc:id="4d12447e-35ad-4e64-9db8-ffd6530a6aea" config-ref="Anypoint_MQ_Config" ackToken="#[vars.ackToken]"/>
 		<error-handler ref="Global_Error_Handler" />
 	</flow>
 	<flow name="esito-allegati-geocall-proc-health" doc:id="9940f9bd-f322-48f2-b7a1-afbcfc927887">

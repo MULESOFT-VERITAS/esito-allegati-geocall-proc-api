@@ -52,6 +52,7 @@ ErrorMapper::error(
 	</error-handler>
 	<error-handler name="Global_Error_Handler" doc:id="c4ec2e41-0923-49a7-bdf3-3baa0eaf4b40" >
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="0aad0a6c-be3c-4185-992a-6b62039c20ef" type="HTTP:NOT_FOUND" when='#[isEmpty(vars."error-already-logged")]'>
+			<anypoint-mq:nack doc:name="Nack" doc:id="9c8d9957-19c4-4cf6-bc84-bb7342ef2b8e" config-ref="Anypoint_MQ_Config" ackToken="#[vars.ackToken]"/>
 			<set-variable value="404" doc:name="httpStatus" doc:id="b3f690b6-0bcd-4f79-81a1-a41397981c86" variableName="httpStatus" />
 			<flow-ref doc:name="CommonErrorMsgTemplate" doc:id="04936323-4edf-44e1-882f-ecdf1cce012b" name="CommonErrorMsgTemplateNoWsc" />
 

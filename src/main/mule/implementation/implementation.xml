@@ -19,13 +19,20 @@ payload]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<flow-ref doc:name="sendListaAllegatiToSapCallSub" doc:id="599fe60b-bf4c-4672-be6d-e5d0549e7885" name="sendListaAllegatiToSapCallSub" />
-		<anypoint-mq:publish doc:name="Publish" doc:id="2381d01f-861a-485e-9fba-2d37646d8924" config-ref="Anypoint_MQ_Config" destination="${mq.esito-allegati}">
+		<choice doc:name="Choice" doc:id="9014b356-10bc-4aa4-a090-9f0fa867987b" >
+			<when expression='#[vars."type" != "E"]'>
+				<anypoint-mq:publish doc:name="Publish" doc:id="2381d01f-861a-485e-9fba-2d37646d8924" config-ref="Anypoint_MQ_Config" destination="${mq.esito-allegati}">
 			<reconnect frequency="${mq.frequency}" count="${mq.reconnection}" />
 			<anypoint-mq:body><![CDATA[#[vars.savePayload]]]></anypoint-mq:body>
 			<anypoint-mq:properties><![CDATA[#[{
 	corrlationId: vars.correlationId
 }]]]></anypoint-mq:properties>
 		</anypoint-mq:publish>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="2f8ccfc2-279f-47a9-b8d0-244a155ff32b" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;Messaggio non accodato&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: vars.correlationId default correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]"/>
+			</otherwise>
+		</choice>
 		<ee:transform doc:name="output" doc:id="4c8d73b0-f175-4774-a655-60b164131d29">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
@@ -33,10 +40,16 @@ output application/json
 ---
 
 {
-  "message": "Request has been accepted for processing"
+  "type": vars."type" default "",
+  "number": vars."number" default "",
+  "message": vars."message" default "La richiesta è stata accettata per l'elaborazione"
 }]]></ee:set-payload>
 			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="httpStatus" ><![CDATA[if(!isEmpty(attributes.messageId)) 202 else 200]]></ee:set-variable>
+			</ee:variables>
 		</ee:transform>
+		<flow-ref doc:name="skipEmptyOrNull" doc:id="f552f1cf-e65b-4a38-b202-ae29727abf77" name="skipEmptyObject"/>
 	</sub-flow>
 	<sub-flow name="EsitoGeoCallAllegatiImpl" doc:id="abd64c1a-c95b-45eb-a470-d0a87e1c1e68" >
 		<ee:transform doc:name="saveVars" doc:id="438e3ee3-8e08-46be-8468-b4398a6da7bd" >

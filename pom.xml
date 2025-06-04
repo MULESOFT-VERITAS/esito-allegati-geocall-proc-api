@@ -102,20 +102,20 @@
 		<dependency>
 			<groupId>226a3f77-ef40-4d3d-a819-feecee080b3d</groupId>
 			<artifactId>esito-allegati-geocall-proc</artifactId>
-			<version>1.0.9</version>
+			<version>1.0.10</version>
 			<classifier>raml</classifier>
 			<type>zip</type>
 		</dependency>
 		<dependency>
 			<groupId>org.mule.connectors</groupId>
 			<artifactId>mule-wsc-connector</artifactId>
-			<version>1.10.3</version>
+			<version>1.11.2</version>
 			<classifier>mule-plugin</classifier>
 		</dependency>
 		<dependency>
 			<groupId>com.mulesoft.connectors</groupId>
 			<artifactId>anypoint-mq-connector</artifactId>
-			<version>4.0.12</version>
+			<version>4.0.13</version>
 			<classifier>mule-plugin</classifier>
 		</dependency>
 	</dependencies>

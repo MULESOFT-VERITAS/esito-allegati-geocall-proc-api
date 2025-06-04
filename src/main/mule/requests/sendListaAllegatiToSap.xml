@@ -45,6 +45,20 @@ n0#Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse: {
 }
 ]]></ee:set-payload>
 			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="type" ><![CDATA[%dw 2.0
+output application/json
+---
+payload.body.Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse.T_RETURN.item.TYPE]]></ee:set-variable>
+				<ee:set-variable variableName="number" ><![CDATA[%dw 2.0
+output application/json
+---
+payload.body.Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse.T_RETURN.item.NUMBER]]></ee:set-variable>
+				<ee:set-variable variableName="message" ><![CDATA[%dw 2.0
+output application/json
+---
+payload.body.Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse.T_RETURN.item.MESSAGE]]></ee:set-variable>
+			</ee:variables>
 		</ee:transform>
 		<logger level="INFO" doc:name="END" doc:id="31bd5d54-5f53-4d4c-851d-320ee0aa6975" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;END invioListaAllegati to SAP&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: vars.correlationId default correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: write(logPayload,&quot;application/xml&quot;)) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
 	</sub-flow>
