@@ -19,7 +19,6 @@
 		<categories>[]</categories>
 		<fields>[]</fields>
 	</properties>
-
 	<build>
 		<plugins>
 			<plugin>
