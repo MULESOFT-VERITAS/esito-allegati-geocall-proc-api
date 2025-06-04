@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation"
+<mule xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq"
+	xmlns:validation="http://www.mulesoft.org/schema/mule/validation"
 	xmlns:sqs="http://www.mulesoft.org/schema/mule/sqs"
-	xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
-	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+	xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd 
 http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd 
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd">
+http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd">
 	<sub-flow name="save-input-subflow" doc:id="d5eee6f3-2044-4743-bcb0-8bb389bacde1" >
 		<set-variable value="#[attributes.relativePath]" doc:name="path-name" doc:id="70ff3a32-8f22-4d4f-a5af-9cb69dc2caae" variableName="pathName"/>
 		<set-variable value="#[payload]" doc:name="input-payload" doc:id="7e757a4c-cd6b-4193-851b-d1b57b5c7092" variableName="inputPayload"/>
@@ -18,5 +19,25 @@ http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/
 	<sub-flow name="clear-input-subflow" doc:id="80d7b09b-6630-4f2d-835b-f3d4b248c83c" >
 		<remove-variable doc:name="input-payload" doc:id="d1b0ae24-1ade-4229-b802-d1e412d7bb0b" variableName="inputPayload"/>
 		<remove-variable doc:name="input-attributes" doc:id="43b6fbc3-a067-4970-8470-a5644a3094ea" variableName="inputAttributes"/>
+	</sub-flow>
+	<sub-flow name="mqAck" doc:id="cd799bbc-a0bb-4110-a346-3e75c31468b9" >
+		<choice doc:name="Choice" doc:id="6307fb08-89bf-43e6-a7ac-273706323839" >
+			<when expression="#[!isEmpty(vars.ackToken)]">
+				<anypoint-mq:ack doc:name="Ack" doc:id="699bdf71-481b-4478-9a2b-0bdeabcf4ab3" config-ref="Anypoint_MQ_Config" ackToken="#[vars.ackToken]" />
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="c39e8c4d-6af1-4023-8bec-6791b322f06a"/>
+			</otherwise>
+		</choice>
+	</sub-flow>
+	<sub-flow name="mqNack" doc:id="9a8f0ad8-d9c8-4711-8225-f43755d574a6" >
+		<choice doc:name="Choice" doc:id="18ac3cd3-a34e-4869-b3db-1041bf60089a" >
+			<when expression="#[!isEmpty(vars.ackToken)]">
+				<anypoint-mq:nack doc:name="Nack" doc:id="c0a655de-e3a7-4f06-b514-05b2e8613873" config-ref="Anypoint_MQ_Config" ackToken="#[vars.ackToken]" />
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="1282be55-7be4-458a-95bd-a6fbcf77e185" />
+			</otherwise>
+		</choice>
 	</sub-flow>	
 </mule>
