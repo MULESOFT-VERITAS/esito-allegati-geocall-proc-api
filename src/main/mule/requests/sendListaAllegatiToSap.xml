@@ -26,7 +26,7 @@ urn#Z_WS_GEOCALL_ESITO_ALLEG_LISTA: {
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="START" doc:id="dc37b983-ec6d-43fe-95e8-4e4886953805" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;START invioListaAllegati to SAP&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: vars.correlationId default correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: write(logPayload,&quot;application/xml&quot;)) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
-		<wsc:consume doc:id="354fd2b1-f1d8-444d-848f-969864e818f3" config-ref="Web_Service_Consumer_Config" operation="Z_WS_GEOCALL_ESITO_ALLEG_LISTA" doc:name="Z_WS_GEOCALL_ESITO_ALLEG_LISTA"/>
+		<!-- [STUDIO:"Z_WS_GEOCALL_ESITO_ALLEG_LISTA"]<wsc:consume doc:id="354fd2b1-f1d8-444d-848f-969864e818f3" config-ref="Web_Service_Consumer_Config" operation="Z_WS_GEOCALL_ESITO_ALLEG_LISTA" doc:name="Z_WS_GEOCALL_ESITO_ALLEG_LISTA"/> [STUDIO] -->
 		<ee:transform doc:name="output" doc:id="2a2f043a-630e-4621-bdd0-af8e87b0ad18">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0

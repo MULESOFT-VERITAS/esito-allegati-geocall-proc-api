@@ -93,6 +93,6 @@ http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/m
  	<http:request-config name="HttpNextGenRequestConfig" doc:name="HTTPRequestconfiguration" doc:id="d85260c1-172d-4ace-b535-7bf4d0256de4" basePath="${nextGen.basePath}" sendCorrelationId="ALWAYS" responseTimeout="${nextGen.responseTimeout}">
 		<http:request-connection host="${nextGen.host}" port="${nextGen.port}" connectionIdleTimeout="${nextGen.connectionIdleTimeout}" protocol="${nextGen.protocol}"/>
 	</http:request-config>
-	<anypoint-mq:circuit-breaker name="Circuit_breaker" tripTimeout="30000" doc:name="Circuit breaker" doc:id="fc6c58ca-b32d-4dca-bdff-913a60f2d07d" onErrorTypes="HTTP:NOT_FOUND" errorsThreshold="3" />
+	<anypoint-mq:circuit-breaker name="Circuit_breaker" tripTimeout="30" doc:name="Circuit breaker" doc:id="fc6c58ca-b32d-4dca-bdff-913a60f2d07d" onErrorTypes="HTTP:NOT_FOUND" errorsThreshold="2" tripTimeoutUnit="SECONDS"/>
 
 </mule>
