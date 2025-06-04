@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-	xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
-http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd">
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 
 	<sub-flow name="esitoAllegatiToSapCallSub" doc:id="6c8c2254-d194-4fb9-934d-0b7d8f164b17" >
 		<ee:transform doc:name="Input" doc:id="2eadd79f-b7c8-44c2-a8db-d9638854183d">
@@ -35,7 +36,29 @@ urn#Z_WS_GEOCALL_ESITO_ALLEGATI: {
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="START" doc:id="dc37b983-ec6d-43fe-95e8-4e4886953805" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload =  payload update {&#10;    case Z_WS_GEOCALL_ESITO_ALLEGATI at .Z_WS_GEOCALL_ESITO_ALLEGATI -&gt;&#10;      Z_WS_GEOCALL_ESITO_ALLEGATI update {&#10;        case ALLEGATO_01 at .ALLEGATO_01 -&gt;&#10;          ALLEGATO_01 - &quot;CONT_FILE&quot;&#10;      }&#10;  } &#10;var status = &quot;ok&quot;&#10;var msg = &quot;START esitoAllegati to SAP&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: vars.correlationId default correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: write(logPayload,&quot;application/xml&quot;)) if (p('log.level') == &quot;DEBUG&quot;) ,   &#10;  env: p('mule.env')&#10; }&#10;)]" />
-		<wsc:consume doc:id="354fd2b1-f1d8-444d-848f-969864e818f3" config-ref="Web_Service_Consumer_Config" operation="Z_WS_GEOCALL_ESITO_ALLEGATI" doc:name="Z_WS_GEOCALL_ESITO_ALLEGATI"/>
+		<http:request method="POST" doc:name="Z_WS_GEOCALL_ESITO_ALLEGATI" doc:id="445bb6d7-b1eb-4e88-b24f-e18c53d6df96" config-ref="HTTP_Configuration_SAP" path="${sap.uri}" target="outputGetAttachmentsGeoCall">
+			<non-repeatable-stream />
+			<reconnect frequency="${http.frequency}" count="${http.reconnection}" />
+			<http:body ><![CDATA[#[%dw 2.0
+output application/xml 
+ns soapenv http://schemas.xmlsoap.org/soap/envelope/
+---
+
+soapenv#Envelope @('xmlns:ser': "http://services.sol.atos.net/") :{
+    soapenv#Header : {
+    },
+    soapenv#Body:
+		payload
+    
+}]]]></http:body>
+			<http:headers><![CDATA[#[output application/json
+---
+{
+	"Content-Type" : "text/xml;charset=UTF-8",
+	"Accept": "application/xml",
+	"operation": "Z_WS_GEOCALL_ESITO_ALLEGATI"
+	}]]]></http:headers>
+		</http:request>
 		<ee:transform doc:name="output" doc:id="296393cb-b4b0-4eaa-b1b6-f9b5843ca60d" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0

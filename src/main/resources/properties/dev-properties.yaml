@@ -19,6 +19,7 @@ sap:
     host: "s4test.gruppoveritas.it"
     port: "443"
     address: "https://s4test.gruppoveritas.it/sap/bc/srt/rfc/sap/z_wfm_geocall_esito_allegati/300/zwfm_geocall_esito_allegati/zwfm_geocall_esito_allegati"
+    uri: "/sap/bc/srt/rfc/sap/z_wfm_geocall_esito_allegati/300/zwfm_geocall_esito_allegati/zwfm_geocall_esito_allegati"
 nextGen:
     protocol: "HTTPS"
     host: "veritas.fsm-test.overit.cloud"
