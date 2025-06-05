@@ -15,11 +15,10 @@ ns urn urn:sap-com:document:sap:rfc:functions
 
 ---
 urn#Z_WS_GEOCALL_ESITO_ALLEG_LISTA: {
-  EXTERNALCODE: vars.savePratica.externalCode,
-  NOTIFICATIONNUMBERSAP: vars.savePratica.notificationNumberSap,
-  TOTALE_ALLEGATI: vars.countAllegati,
+  EXTERNALCODE: payload.externalCode,
+  NOTIFICATIONNUMBERSAP: payload.notificationNumberSap,
   "T_RETURN": "",
-  WOCODE: vars.savePratica.wocode
+  WOCODE: payload.wocode
   
 }
 ]]></ee:set-payload>
