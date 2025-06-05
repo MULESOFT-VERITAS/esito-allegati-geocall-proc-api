@@ -1,7 +1,0 @@
-%dw 2.0
-
-type auto_6c8c2254_d194_4fb9_934d_0b7d8f164b17_Output_Payload = {
-  message: String, 
-  _?: Any
-}
-

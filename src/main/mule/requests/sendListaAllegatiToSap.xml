@@ -15,20 +15,20 @@ ns urn urn:sap-com:document:sap:rfc:functions
 
 ---
 urn#Z_WS_GEOCALL_ESITO_ALLEG_LISTA: {
-  EXTERNALCODE: vars.savePratica.externalCode,
-  NOTIFICATIONNUMBERSAP: vars.savePratica.notificationNumberSap,
-  TOTALE_ALLEGATI: vars.countAllegati,
+  EXTERNALCODE: payload.pratica.externalCode,
+  NOTIFICATIONNUMBERSAP: payload.pratica.notificationNumberSap,
+  TOTALE_ALLEGATI: sizeOf(payload.listaAllegati),
   "T_RETURN": "",
-  WOCODE: vars.savePratica.wocode
+  WOCODE: payload.pratica.wocode
   
 }
 ]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="START" doc:id="dc37b983-ec6d-43fe-95e8-4e4886953805" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;START InvioListaAllegati to SAP&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: vars.correlationId default correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: write(logPayload,&quot;application/xml&quot;)) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
-		<wsc:consume doc:id="354fd2b1-f1d8-444d-848f-969864e818f3" config-ref="Web_Service_Consumer_Config" operation="Z_WS_GEOCALL_ESITO_ALLEG_LISTA" doc:name="Z_WS_GEOCALL_ESITO_ALLEG_LISTA">
+		<!-- [STUDIO:"Z_WS_GEOCALL_ESITO_ALLEG_LISTA"]<wsc:consume doc:id="354fd2b1-f1d8-444d-848f-969864e818f3" config-ref="Web_Service_Consumer_Config" operation="Z_WS_GEOCALL_ESITO_ALLEG_LISTA" doc:name="Z_WS_GEOCALL_ESITO_ALLEG_LISTA">
 			<reconnect frequency="${http.frequency}" count="${http.reconnection}"/>
-		</wsc:consume>
+		</wsc:consume> [STUDIO] -->
 		<ee:transform doc:name="output" doc:id="2a2f043a-630e-4621-bdd0-af8e87b0ad18">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
@@ -48,18 +48,6 @@ n0#Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse: {
 ]]></ee:set-payload>
 			</ee:message>
 			<ee:variables >
-				<ee:set-variable variableName="type" ><![CDATA[%dw 2.0
-output application/json
----
-payload.body.Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse.T_RETURN.item.TYPE]]></ee:set-variable>
-				<ee:set-variable variableName="number" ><![CDATA[%dw 2.0
-output application/json
----
-payload.body.Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse.T_RETURN.item.NUMBER]]></ee:set-variable>
-				<ee:set-variable variableName="message" ><![CDATA[%dw 2.0
-output application/json
----
-payload.body.Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse.T_RETURN.item.MESSAGE]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<logger level="INFO" doc:name="END" doc:id="31bd5d54-5f53-4d4c-851d-320ee0aa6975" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;END invioListaAllegati from SAP&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: vars.correlationId default correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: write(logPayload,&quot;application/xml&quot;)) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />

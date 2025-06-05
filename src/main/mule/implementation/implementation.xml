@@ -7,27 +7,28 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd">
 	<sub-flow name="SendListaAllegatiImpl" doc:id="aa9ee1c2-f828-4391-b83c-c972b6fce7fb">
-		<ee:transform doc:name="saveVars" doc:id="89627783-1c7c-43d6-8392-08b96d04b4ff">
-			<ee:message />
-			<ee:variables>
-				<ee:set-variable variableName="savePratica"><![CDATA[payload.pratica]]></ee:set-variable>
-				<ee:set-variable variableName="countAllegati"><![CDATA[sizeOf(payload.listaAllegati)]]></ee:set-variable>
-				<ee:set-variable variableName="savePayload"><![CDATA[%dw 2.0
-output application/json
----
-payload]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
+		<set-variable value="#[payload]" doc:name="savePayload" doc:id="e7f86e3b-f5aa-43b1-bb6c-e97e7a232695" variableName="savePayload"/>
 		<flow-ref doc:name="sendListaAllegatiToSapCallSub" doc:id="599fe60b-bf4c-4672-be6d-e5d0549e7885" name="sendListaAllegatiToSapCallSub" />
 		<choice doc:name="Choice" doc:id="9014b356-10bc-4aa4-a090-9f0fa867987b" >
 			<when expression='#[vars."type" != "E"]'>
-				<anypoint-mq:publish doc:name="Publish" doc:id="2381d01f-861a-485e-9fba-2d37646d8924" config-ref="Anypoint_MQ_Config" destination="${mq.esito-allegati}">
+				<foreach doc:name="For Each" doc:id="44529bf1-6d2f-4937-b747-7373a63a921b" collection="#[vars.savePayload.listaAllegati]">
+					<anypoint-mq:publish doc:name="Publish" doc:id="2381d01f-861a-485e-9fba-2d37646d8924" config-ref="Anypoint_MQ_Config" destination="${mq.esito-allegati}">
 			<reconnect frequency="${mq.frequency}" count="${mq.reconnection}" />
-			<anypoint-mq:body><![CDATA[#[vars.savePayload]]]></anypoint-mq:body>
-			<anypoint-mq:properties><![CDATA[#[{
+			<anypoint-mq:body ><![CDATA[#[output application/json
+---
+{
+	pratica : vars.savePayload.pratica,
+	allegato : payload,
+	properties: {
+		progressivoAllegato: vars.counter,
+		totaleAllegati: sizeOf(vars.savePayload.listaAllegati)
+	}
+}]]]></anypoint-mq:body>
+						<anypoint-mq:properties><![CDATA[#[{
 	corrlationId: vars.correlationId
 }]]]></anypoint-mq:properties>
 		</anypoint-mq:publish>
+				</foreach>
 			</when>
 			<otherwise >
 				<logger level="INFO" doc:name="Logger" doc:id="2f8ccfc2-279f-47a9-b8d0-244a155ff32b" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;Messaggio non accodato&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: vars.correlationId default correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]"/>
@@ -40,9 +41,9 @@ output application/json
 ---
 
 {
-  "type": vars."type" default "",
-  "number": vars."number" default "",
-  "message": vars."message" default "La richiesta è stata accettata per l'elaborazione"
+  "type": payload.body.Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse.T_RETURN.item.TYPE default "",
+  "number": payload.body.Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse.T_RETURN.item.NUMBER default "",
+  "message": payload.body.Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse.T_RETURN.item.MESSAGE default "La richiesta è stata accettata per l'elaborazione"
 }]]></ee:set-payload>
 			</ee:message>
 			<ee:variables >
@@ -50,6 +51,7 @@ output application/json
 			</ee:variables>
 		</ee:transform>
 		<flow-ref doc:name="skipEmptyOrNull" doc:id="f552f1cf-e65b-4a38-b202-ae29727abf77" name="skipEmptyObject"/>
+		<logger level="INFO" doc:name="END" doc:id="3228fa75-2500-418b-95fa-b16ec7e3a4cc" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;END GeocallEsitoAllegati&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
 	</sub-flow>
 	<sub-flow name="GetStatoEsitoAllegatiToSapImpl" doc:id="b99d72cc-d542-49c2-bfd9-02d9bd7f1ef8" >
 		<flow-ref doc:name="getStatoEsitoAllegatiToSap" doc:id="d2f192e2-d45d-425f-9e71-4ed310a2b4f0" name="getStatoEsitoAllegatiToSap"/>
@@ -62,27 +64,72 @@ payload
 ]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<logger level="INFO" doc:name="END" doc:id="f57fde48-9a76-4c09-b8ca-997a98f45bc4" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;END GeocallStatoEsitoAllegati&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
 	</sub-flow>
 	<sub-flow name="EsitoGeoCallAllegatiImpl" doc:id="abd64c1a-c95b-45eb-a470-d0a87e1c1e68" >
-		<ee:transform doc:name="saveVars" doc:id="438e3ee3-8e08-46be-8468-b4398a6da7bd" >
-			<ee:message >
-			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="savePratica" ><![CDATA[payload.pratica]]></ee:set-variable>
-				<ee:set-variable variableName="countAllegati" ><![CDATA[sizeOf(payload.listaAllegati)]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-		<foreach doc:name="For Each" doc:id="e8fb82c9-0820-4a23-98c3-6339d7700653" collection="#[payload.listaAllegati]">
-			<ee:transform doc:name="saveCurrentListaAllegati" doc:id="77e5ea8e-13ff-45fe-9dca-4857a4f9cd6c">
-				<ee:message>
-				</ee:message>
-				<ee:variables>
-					<ee:set-variable variableName="saveCurrentLista"><![CDATA[payload]]></ee:set-variable>
-				</ee:variables>
-			</ee:transform>
-				<flow-ref doc:name="getAttachFromGeoCallSub" doc:id="9244ea6d-d185-454e-ab90-934ccf338477" name="getAttachFromGeoCallSub" target="attachmentGeocall" />
-			<flow-ref doc:name="esitoAllegatiToSapCallSub" doc:id="d33ae757-ec6a-4366-bcb0-9f0395aea277" name="esitoAllegatiToSapCallSub" />
-		</foreach>
+		<set-variable value="#[attributes.ackToken]" doc:name="ackToken" doc:id="77e69b24-de7a-40d7-ac9e-e9693c46f5f0" variableName="ackToken" />
+		<set-variable value="#[attributes.properties.corrlationId default correlationId]" doc:name="correlationId" doc:id="c75cf1d8-9a16-4508-8a42-9c7f5da82a66" variableName="correlationId" />
+		<set-variable value="#[payload]" doc:name="savePayload" doc:id="3f6f9737-b9b4-489e-8f2d-6865e2f59eaa" variableName="savePayload" />
+		<logger level="INFO" doc:name="START" doc:id="d5096b24-8475-4e5c-b19f-e73247be7173" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;START GeocallEsitoAllegati ASYNC&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: vars.correlationId default correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
+		<http:request method="GET" doc:name="NextGenOutComeAttachments" doc:id="9a298652-c19b-482a-a5b4-026477614ebf" config-ref="HttpNextGenRequestConfig" path="${nextGen.services.outComeAttachments}">
+				<non-repeatable-stream />
+				<reconnect frequency="${http.frequency}" count="${http.reconnection}" />
+				<http:headers><![CDATA[#[output application/json
+---
+{
+	"Content-Type" : "application/json",
+	"Accept": "application/json",
+	"X-Apy-Key": Mule::p('secure::nextGen.api-key')
+}]]]></http:headers>
+				<http:uri-params><![CDATA[#[output application/json
+---
+
+{
+	idAllegato : vars.savePayload.allegato.idAllegato
+}]]]></http:uri-params>
+			</http:request>
+		<http:request method="POST" doc:name="Z_WS_GEOCALL_ESITO_ALLEGATI" doc:id="2cb3258e-e232-4a4b-b7d9-3d1db49d4054" config-ref="HTTP_Configuration_SAP" path="${sap.uri}" target="outputGetAttachmentsGeoCall">
+				<non-repeatable-stream />
+				<reconnect frequency="${http.frequency}" count="${http.reconnection}" />
+				<http:body><![CDATA[#[%dw 2.0
+output application/xml 
+ns soapenv http://schemas.xmlsoap.org/soap/envelope/
+ns urn urn:sap-com:document:sap:rfc:functions
+
+---
+
+soapenv#Envelope @('xmlns:ser': "http://services.sol.atos.net/") :{
+    soapenv#Header : {
+    },
+    soapenv#Body:
+		urn#Z_WS_GEOCALL_ESITO_ALLEGATI: {
+  			ALLEGATO_01: {
+    			TIPO_ALLEGATO: vars.savePayload.allegato.tipoAllegato,
+    			PROGRESSIVO: vars.savePayload.properties.progressivoAllegato,
+    			NOME_FILE_ORIGINALE: vars.savePayload.allegato.nomeFileOriginale,
+    			NOME_FILE_NORMALIZZATO: vars.savePayload.allegato.nomeFileNormalizzato,
+    			DESCRIZIONE: vars.savePayload.allegato.descrizione,
+    			FORMATO: vars.savePayload.allegato.formato,
+    			DIMENSIONE: vars.savePayload.allegato.dimensione,
+    			CONT_FILE: payload.attachmentContent
+ 	 	},
+  			EXTERNALCODE: vars.savePayload.pratica.externalCode,
+  			NOTIFICATIONNUMBERSAP: vars.savePayload.pratica.notificationNumberSap,
+  			TOTALE_ALLEGATI: vars.savePayload.properties.totaleAllegati,
+  			T_RETURN: "",
+  			WOCODE: vars.savePayload.pratica.wocode
+  
+		}    
+	}]]]></http:body>
+				<http:headers><![CDATA[#[output application/json
+---
+{
+	"Content-Type" : "text/xml;charset=UTF-8",
+	"Accept": "application/xml",
+	"operation": "Z_WS_GEOCALL_ESITO_ALLEGATI"
+	}]]]></http:headers>
+			</http:request>
+		<logger level="INFO" doc:name="END" doc:id="99fb7270-9836-4d76-a984-e43858d9ed32" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = {messaggio: &quot;allegato inviato a sap&quot;} &#10;var status = &quot;ok&quot;&#10;var msg = &quot;END GeocallEsitoAllegati ASYNC&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: vars.correlationId default correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: logPayload default {&quot;status&quot;: &quot;ok&quot;}) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
 	</sub-flow>
 	<sub-flow name="hello-implementation" doc:id="184f5c0b-cda3-406d-a7a7-6b873494239f" >
 		<flow-ref doc:name="save-input-subflow" doc:id="b5ffe893-47ed-4975-b778-005a8bfb410c" name="save-input-subflow" />
