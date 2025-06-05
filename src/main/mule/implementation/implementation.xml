@@ -51,6 +51,18 @@ output application/json
 		</ee:transform>
 		<flow-ref doc:name="skipEmptyOrNull" doc:id="f552f1cf-e65b-4a38-b202-ae29727abf77" name="skipEmptyObject"/>
 	</sub-flow>
+	<sub-flow name="GetStatoEsitoAllegatiToSapImpl" doc:id="b99d72cc-d542-49c2-bfd9-02d9bd7f1ef8" >
+		<flow-ref doc:name="getStatoEsitoAllegatiToSap" doc:id="d2f192e2-d45d-425f-9e71-4ed310a2b4f0" name="getStatoEsitoAllegatiToSap"/>
+		<ee:transform doc:name="output" doc:id="07226aa5-c7ea-4940-b605-b16c960a1aa7" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json duplicateKeyAsArray=true
+---
+payload
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
 	<sub-flow name="EsitoGeoCallAllegatiImpl" doc:id="abd64c1a-c95b-45eb-a470-d0a87e1c1e68" >
 		<ee:transform doc:name="saveVars" doc:id="438e3ee3-8e08-46be-8468-b4398a6da7bd" >
 			<ee:message >

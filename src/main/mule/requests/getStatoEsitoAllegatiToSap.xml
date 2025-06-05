@@ -6,7 +6,7 @@
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd">
 
-	<sub-flow name="sendListaAllegatiToSapCallSub" doc:id="6c8c2254-d194-4fb9-934d-0b7d8f164b17" >
+	<sub-flow name="getStatoEsitoAllegatiToSap" doc:id="6c8c2254-d194-4fb9-934d-0b7d8f164b17" >
 		<ee:transform doc:name="Input" doc:id="752a991a-64fe-494d-8b0b-77c44e408047">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
@@ -25,8 +25,8 @@ urn#Z_WS_GEOCALL_ESITO_ALLEG_LISTA: {
 ]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<logger level="INFO" doc:name="START" doc:id="dc37b983-ec6d-43fe-95e8-4e4886953805" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;START InvioListaAllegati to SAP&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: vars.correlationId default correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: write(logPayload,&quot;application/xml&quot;)) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
-		<wsc:consume doc:id="354fd2b1-f1d8-444d-848f-969864e818f3" config-ref="Web_Service_Consumer_Config" operation="Z_WS_GEOCALL_ESITO_ALLEG_LISTA" doc:name="Z_WS_GEOCALL_ESITO_ALLEG_LISTA">
+		<logger level="INFO" doc:name="START" doc:id="dc37b983-ec6d-43fe-95e8-4e4886953805" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;START GetStatoEsitoAllegati to SAP&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: vars.correlationId default correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: write(logPayload,&quot;application/xml&quot;)) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
+		<wsc:consume doc:id="354fd2b1-f1d8-444d-848f-969864e818f3" config-ref="Web_Service_Consumer_Config" operation="Z_WS_GEOCALL_ESITO_ALLEG_LISTA" doc:name="getStatoAllegatiToSap">
 			<reconnect frequency="${http.frequency}" count="${http.reconnection}"/>
 		</wsc:consume>
 		<ee:transform doc:name="output" doc:id="2a2f043a-630e-4621-bdd0-af8e87b0ad18">
@@ -62,6 +62,6 @@ output application/json
 payload.body.Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse.T_RETURN.item.MESSAGE]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<logger level="INFO" doc:name="END" doc:id="31bd5d54-5f53-4d4c-851d-320ee0aa6975" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;END invioListaAllegati from SAP&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: vars.correlationId default correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: write(logPayload,&quot;application/xml&quot;)) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
+		<logger level="INFO" doc:name="END" doc:id="31bd5d54-5f53-4d4c-851d-320ee0aa6975" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;END GetStatoEsitoAllegati from SAP&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: vars.correlationId default correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: write(logPayload,&quot;application/xml&quot;)) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
 	</sub-flow>
 </mule>
