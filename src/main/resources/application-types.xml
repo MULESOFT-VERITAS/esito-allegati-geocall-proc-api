@@ -1017,5 +1017,4 @@ type auto_367f6462_5628_4674_aa82_778d517d6887_Output_Variables_savePratica = An
       </types:output-event>
     </types:processor-declaration>
   </types:enrichment>
-  <types:enrichment select="#2a2f043a-630e-4621-bdd0-af8e87b0ad18"/>
 </types:mule>
