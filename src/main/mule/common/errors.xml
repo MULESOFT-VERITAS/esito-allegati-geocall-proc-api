@@ -90,7 +90,11 @@ ErrorMapper::error(
 			<set-variable value="403" doc:name="httpStatus" doc:id="3fa97a55-5c37-46e9-84d4-376411d87f46" variableName="httpStatus" />
 			<flow-ref doc:name="CommonErrorMsgTemplate" doc:id="ad88d5cd-4e36-43ad-bad9-71ba0d1a310a" name="CommonErrorMsgTemplateNoWsc" />
 		</on-error-propagate>
-		
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="7c04f4ec-3a50-4163-9396-e168576f2db5" type="HTTP:SERVICE_UNAVAILABLE" when='#[isEmpty(vars."error-already-logged")]'>
+			<flow-ref doc:name="Nack" doc:id="fdda2b43-03bc-4030-b1b4-426257cff035" name="mqNack" />
+			<set-variable value="403" doc:name="httpStatus" doc:id="d4b12fa5-d21b-4e06-ac02-2f047ca19f6d" variableName="httpStatus" />
+			<flow-ref doc:name="CommonErrorMsgTemplate" doc:id="9ea69376-7dd3-428c-a634-104407f7acd9" name="CommonErrorMsgTemplateNoWsc" />
+		</on-error-propagate>		
 		
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="daeba919-f109-4007-8234-6dd9b4564eed" type="ANYPOINT-MQ:CONNECTIVITY" when='#[isEmpty(vars."error-already-logged")]'>
 			<flow-ref doc:name="Ack" doc:id="e1d7203e-f095-4832-9409-41eadf2fec5e" name="mqAck" />

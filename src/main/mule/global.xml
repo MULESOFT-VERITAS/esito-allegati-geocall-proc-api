@@ -93,6 +93,6 @@ http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/m
  	<http:request-config name="HttpNextGenRequestConfig" doc:name="HTTPRequestconfiguration" doc:id="d85260c1-172d-4ace-b535-7bf4d0256de4" basePath="${nextGen.basePath}" sendCorrelationId="ALWAYS" responseTimeout="${nextGen.responseTimeout}">
 		<http:request-connection host="${nextGen.host}" port="${nextGen.port}" connectionIdleTimeout="${nextGen.connectionIdleTimeout}" protocol="${nextGen.protocol}"/>
 	</http:request-config>
-	<anypoint-mq:circuit-breaker name="Circuit_breaker" tripTimeout="15" doc:name="Circuit breaker" doc:id="fc6c58ca-b32d-4dca-bdff-913a60f2d07d" onErrorTypes="HTTP:NOT_FOUND,HTTP:INTERNAL_SERVER_ERROR,HTTP:CONNECTIVITY,HTTP:TIMEOUT,HTTP:UNAUTHORIZED,HTTP:FORBIDDEN,WSC:CANNOT_DISPATCH,WSC:CONNECTIVITY,WSC:INVALID_WSDL,WSC:RETRY_EXHAUSTED,WSC:SOAP_FAULT,WSC:TIMEOUT" errorsThreshold="2" tripTimeoutUnit="SECONDS"/>
+	<anypoint-mq:circuit-breaker name="Circuit_breaker" tripTimeout="15" doc:name="Circuit breaker" doc:id="fc6c58ca-b32d-4dca-bdff-913a60f2d07d" onErrorTypes="HTTP:NOT_FOUND,HTTP:SERVICE_UNAVAILABLE,HTTP:INTERNAL_SERVER_ERROR,HTTP:CONNECTIVITY,HTTP:TIMEOUT,HTTP:UNAUTHORIZED,HTTP:FORBIDDEN,WSC:CANNOT_DISPATCH,WSC:CONNECTIVITY,WSC:INVALID_WSDL,WSC:RETRY_EXHAUSTED,WSC:SOAP_FAULT,WSC:TIMEOUT" errorsThreshold="2" tripTimeoutUnit="SECONDS"/>
 
 </mule>
