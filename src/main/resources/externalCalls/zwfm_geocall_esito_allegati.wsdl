@@ -139,8 +139,18 @@
 					<sapsession:enableSession>false</sapsession:enableSession>
 				</sapsession:Session>
 				<sapcentraladmin:CentralAdministration xmlns:sapcentraladmin="http://www.sap.com/webas/700/soap/features/CentralAdministration/" wsp:Optional="true">
-					<sapcentraladmin:BusinessApplicationID>9A0231A2060C1EEF8EC11D85640C5B8C</sapcentraladmin:BusinessApplicationID>
+					<sapcentraladmin:BusinessApplicationID>6603D4691F0C1EDFA0953386CCB440C1</sapcentraladmin:BusinessApplicationID>
 				</sapcentraladmin:CentralAdministration>
+			</wsp:All>
+		</wsp:ExactlyOne>
+	</wsp:Policy>
+	<wsp:Policy wsu:Id="OP__Z_WS_GEOCALL_ESITO_ALLEG_STATO">
+		<wsp:ExactlyOne>
+			<wsp:All>
+				<saptrhnw05:required xmlns:saptrhnw05="http://www.sap.com/NW05/soap/features/transaction/">no</saptrhnw05:required>
+				<sapcomhnd:enableCommit xmlns:sapcomhnd="http://www.sap.com/NW05/soap/features/commit/">false</sapcomhnd:enableCommit>
+				<sapblock:enableBlocking xmlns:sapblock="http://www.sap.com/NW05/soap/features/blocking/">true</sapblock:enableBlocking>
+				<saprmnw05:enableWSRM xmlns:saprmnw05="http://www.sap.com/NW05/soap/features/wsrm/">false</saprmnw05:enableWSRM>
 			</wsp:All>
 		</wsp:ExactlyOne>
 	</wsp:Policy>
@@ -184,6 +194,11 @@
 			<xsd:simpleType name="char20">
 				<xsd:restriction base="xsd:string">
 					<xsd:maxLength value="20"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="char22">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="22"/>
 				</xsd:restriction>
 			</xsd:simpleType>
 			<xsd:simpleType name="char220">
@@ -252,9 +267,25 @@
 					<xsd:element name="MESSAGE_V4" type="tns:char50"/>
 				</xsd:sequence>
 			</xsd:complexType>
+			<xsd:complexType name="ZGEOCALL_ESITO_ALLEG_STATO">
+				<xsd:sequence>
+					<xsd:element name="NOTIFICATIONNUMBERSAP" type="tns:char12"/>
+					<xsd:element name="EXTERNALCODE" type="tns:char12"/>
+					<xsd:element name="WOCODE" type="tns:char255"/>
+					<xsd:element name="GUID" type="tns:char22"/>
+					<xsd:element name="ALLEGATI_PREVISTI" type="xsd:short"/>
+					<xsd:element name="ALLEGATI_RICEVUTI" type="xsd:short"/>
+					<xsd:element name="ALLEGATI_ELABORATI" type="tns:char1"/>
+				</xsd:sequence>
+			</xsd:complexType>
 			<xsd:complexType name="TABLE_OF_BAPIRETURN1">
 				<xsd:sequence>
 					<xsd:element name="item" type="tns:BAPIRETURN1" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ZGEOCALL_ESITO_ALLEG_STATO_T">
+				<xsd:sequence>
+					<xsd:element name="item" type="tns:ZGEOCALL_ESITO_ALLEG_STATO" minOccurs="0" maxOccurs="unbounded"/>
 				</xsd:sequence>
 			</xsd:complexType>
 			<xsd:element name="Z_WS_GEOCALL_ESITO_ALLEGATI">
@@ -313,6 +344,25 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+			<xsd:element name="Z_WS_GEOCALL_ESITO_ALLEG_STATO">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="EXTERNALCODE" type="tns:char12"/>
+						<xsd:element name="NOTIFICATIONNUMBERSAP" type="tns:char12"/>
+						<xsd:element name="TOTALE_ALLEGATI" type="xsd:short" minOccurs="0"/>
+						<xsd:element name="T_RETURN" type="tns:TABLE_OF_BAPIRETURN1" minOccurs="0"/>
+						<xsd:element name="WOCODE" type="tns:char255" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="STATO_ALLEGATI" type="tns:ZGEOCALL_ESITO_ALLEG_STATO_T"/>
+						<xsd:element name="T_RETURN" type="tns:TABLE_OF_BAPIRETURN1" minOccurs="0"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
 		</xsd:schema>
 	</wsdl:types>
 	<wsdl:message name="Z_WS_GEOCALL_ESITO_ALLEGATI">
@@ -327,10 +377,16 @@
 	<wsdl:message name="Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse">
 		<wsdl:part name="parameter" element="tns:Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse"/>
 	</wsdl:message>
+	<wsdl:message name="Z_WS_GEOCALL_ESITO_ALLEG_STATO">
+		<wsdl:part name="parameters" element="tns:Z_WS_GEOCALL_ESITO_ALLEG_STATO"/>
+	</wsdl:message>
+	<wsdl:message name="Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse">
+		<wsdl:part name="parameter" element="tns:Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse"/>
+	</wsdl:message>
 	<wsdl:portType name="Z_WFM_GEOCALL_ESITO_ALLEGATI">
 		<wsdl:documentation>
 			<sapdoc:sapdoc xmlns:sapdoc="urn:sap:esi:documentation">
-				<sapdoc:docitem docURL="http://s01sapsvil.prv.vestaspa.net:8010/sap/bc/esdt/docu/sd_text?sap-client=300&amp;sd_name=Z_WFM_GEOCALL_ESITO_ALLEGATI"/>
+				<sapdoc:docitem docURL="https://s4test.gruppoveritas.it/sap/bc/esdt/docu/sd_text?sap-client=300&amp;sd_name=Z_WFM_GEOCALL_ESITO_ALLEGATI"/>
 			</sapdoc:sapdoc>
 		</wsdl:documentation>
 		<wsp:Policy>
@@ -350,6 +406,13 @@
 			<wsdl:input message="tns:Z_WS_GEOCALL_ESITO_ALLEG_LISTA"/>
 			<wsdl:output message="tns:Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse"/>
 		</wsdl:operation>
+		<wsdl:operation name="Z_WS_GEOCALL_ESITO_ALLEG_STATO">
+			<wsp:Policy>
+				<wsp:PolicyReference URI="#OP__Z_WS_GEOCALL_ESITO_ALLEG_STATO"/>
+			</wsp:Policy>
+			<wsdl:input message="tns:Z_WS_GEOCALL_ESITO_ALLEG_STATO"/>
+			<wsdl:output message="tns:Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse"/>
+		</wsdl:operation>
 	</wsdl:portType>
 	<wsdl:binding name="Z_WFM_GEOCALL_ESITO_ALLEGATI" type="tns:Z_WFM_GEOCALL_ESITO_ALLEGATI">
 		<wsp:Policy>
@@ -367,6 +430,15 @@
 		</wsdl:operation>
 		<wsdl:operation name="Z_WS_GEOCALL_ESITO_ALLEG_LISTA">
 			<soap:operation soapAction="urn:sap-com:document:sap:rfc:functions:Z_WFM_GEOCALL_ESITO_ALLEGATI:Z_WS_GEOCALL_ESITO_ALLEG_LISTARequest" style="document"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="Z_WS_GEOCALL_ESITO_ALLEG_STATO">
+			<soap:operation soapAction="urn:sap-com:document:sap:rfc:functions:Z_WFM_GEOCALL_ESITO_ALLEGATI:Z_WS_GEOCALL_ESITO_ALLEG_STATORequest" style="document"/>
 			<wsdl:input>
 				<soap:body use="literal"/>
 			</wsdl:input>
@@ -398,13 +470,22 @@
 				<wsoap12:body use="literal"/>
 			</wsdl:output>
 		</wsdl:operation>
+		<wsdl:operation name="Z_WS_GEOCALL_ESITO_ALLEG_STATO">
+			<wsoap12:operation soapAction="urn:sap-com:document:sap:rfc:functions:Z_WFM_GEOCALL_ESITO_ALLEGATI:Z_WS_GEOCALL_ESITO_ALLEG_STATORequest" style="document"/>
+			<wsdl:input>
+				<wsoap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<wsoap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
 	</wsdl:binding>
 	<wsdl:service name="Z_WFM_GEOCALL_ESITO_ALLEGATI">
 		<wsdl:port name="Z_WFM_GEOCALL_ESITO_ALLEGATI" binding="tns:Z_WFM_GEOCALL_ESITO_ALLEGATI">
-			<soap:address location="https://s01sapsvil.prv.vestaspa.net:44310/sap/bc/srt/rfc/sap/z_wfm_geocall_esito_allegati/300/z_wfm_geocall_esito_allegati/z_wfm_geocall_esito_allegati"/>
+			<soap:address location="https://s4test.gruppoveritas.it/sap/bc/srt/rfc/sap/z_wfm_geocall_esito_allegati/300/z_wfm_geocall_esito_allegati/z_wfm_geocall_esito_allegati"/>
 		</wsdl:port>
 		<wsdl:port name="Z_WFM_GEOCALL_ESITO_ALLEGATI_soap12" binding="tns:Z_WFM_GEOCALL_ESITO_ALLEGATI_soap12">
-			<wsoap12:address location="https://s01sapsvil.prv.vestaspa.net:44310/sap/bc/srt/rfc/sap/z_wfm_geocall_esito_allegati/300/z_wfm_geocall_esito_allegati/z_wfm_geocall_esito_allegati"/>
+			<wsoap12:address location="https://s4test.gruppoveritas.it/sap/bc/srt/rfc/sap/z_wfm_geocall_esito_allegati/300/z_wfm_geocall_esito_allegati/z_wfm_geocall_esito_allegati"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>
