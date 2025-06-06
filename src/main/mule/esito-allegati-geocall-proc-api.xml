@@ -25,7 +25,7 @@ http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/m
 		<flow-ref doc:name="GetStatoEsitoAllegatiToSapImpl" doc:id="62e5d05b-e2aa-482b-8b62-b4302504c196" name="GetStatoEsitoAllegatiToSapImpl" />
 		<error-handler ref="Global_Error_Handler" />
 	</flow>
-	<flow name="esito-allegati-geocall-proc-sub" doc:id="35067412-781d-48a4-9d90-37e55aab8648" >
+	<flow name="esito-allegati-geocall-proc-sub" doc:id="35067412-781d-48a4-9d90-37e55aab8648" maxConcurrency="1">
 		<anypoint-mq:subscriber doc:name="Subscriber" doc:id="f50ca782-f42b-4d03-ba24-9853baf89e5f" config-ref="Anypoint_MQ_Config" destination="${mq.esito-allegati}" acknowledgementMode="MANUAL" circuitBreaker="Circuit_breaker">
 			<reconnect frequency="${mq.frequency}" count="${mq.reconnection}" />
 			<anypoint-mq:subscriber-type >

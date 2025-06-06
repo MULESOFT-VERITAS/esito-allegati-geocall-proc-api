@@ -175,7 +175,7 @@ ErrorMapper::error(
 		
 		
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="8cb96684-02da-4a70-bfd5-d2e18aceb659" type="ANY" when='#[isEmpty(vars."error-already-logged")]'>
-			<flow-ref doc:name="Ack" doc:id="72013773-c193-48a0-8154-788cf335d74c" name="mqAck" />
+			<flow-ref doc:name="Nack" doc:id="72013773-c193-48a0-8154-788cf335d74c" name="mqNack" />
 			<flow-ref doc:name="CommonErrorMsgTemplate" doc:id="12466ac8-1a96-466f-8017-81427cab3d8c" name="CommonErrorMsgTemplateNoWsc" />
 		</on-error-propagate>
 		

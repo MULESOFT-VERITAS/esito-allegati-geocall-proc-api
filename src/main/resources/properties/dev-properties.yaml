@@ -33,7 +33,7 @@ mq:
   host: "https://mq-eu-central-1.eu1.anypoint.mulesoft.com/api/v1/organizations/226a3f77-ef40-4d3d-a819-feecee080b3d/environments/5efc06a9-c21e-4e3e-8c98-da9724d06faf"
   client_id: "4df09069169d4272aca6e297c228364a"
   esito-allegati: "DEV-QUEUE-allegati-geocall-lista"
-  max-local-message: "30"
+  max-local-message: "10"
 log:
   level: "DEBUG"
  
