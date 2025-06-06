@@ -10,7 +10,7 @@ http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/m
 		<set-variable value="#[payload]" doc:name="savePayload" doc:id="e7f86e3b-f5aa-43b1-bb6c-e97e7a232695" variableName="savePayload"/>
 		<flow-ref doc:name="sendListaAllegatiToSapCallSub" doc:id="599fe60b-bf4c-4672-be6d-e5d0549e7885" name="sendListaAllegatiToSapCallSub" />
 		<choice doc:name="Choice" doc:id="9014b356-10bc-4aa4-a090-9f0fa867987b" >
-			<when expression='#[vars."type" != "E"]'>
+			<when expression='#[output application/json&#10;---&#10;payload.Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse.T_RETURN.item.TYPE != "E"]'>
 				<foreach doc:name="For Each" doc:id="44529bf1-6d2f-4937-b747-7373a63a921b" collection="#[vars.savePayload.listaAllegati]">
 					<anypoint-mq:publish doc:name="Publish" doc:id="2381d01f-861a-485e-9fba-2d37646d8924" config-ref="Anypoint_MQ_Config" destination="${mq.esito-allegati}">
 			<reconnect frequency="${mq.frequency}" count="${mq.reconnection}" />
@@ -41,9 +41,9 @@ output application/json
 ---
 
 {
-  "type": payload.body.Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse.T_RETURN.item.TYPE default "",
-  "number": payload.body.Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse.T_RETURN.item.NUMBER default "",
-  "message": payload.body.Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse.T_RETURN.item.MESSAGE default "La richiesta è stata accettata per l'elaborazione"
+  "type": payload.Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse.T_RETURN.item.TYPE default "",
+  "number": payload.Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse.T_RETURN.item.NUMBER default "",
+  "message": payload.Z_WS_GEOCALL_ESITO_ALLEG_LISTAResponse.T_RETURN.item.MESSAGE default "La richiesta è stata accettata per l'elaborazione"
 }]]></ee:set-payload>
 			</ee:message>
 			<ee:variables >
@@ -68,17 +68,19 @@ output application/json
     wocode: vars.savePayload.wocode
   },
   stato_allegati: {
-    allegati_previsti: payload.body.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item.ALLEGATI_PREVISTI,
-    allegati_ricevuti: payload.body.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item.ALLEGATI_RICEVUTI,
-    allegati_elaborati: payload.body.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item.ALLEGATI_ELABORATI,
+    allegati_previsti: payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item.ALLEGATI_PREVISTI,
+    allegati_ricevuti: payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item.ALLEGATI_RICEVUTI,
+    allegati_elaborati: payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item.ALLEGATI_ELABORATI,
     guid: payload.body.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item.GUID
   },
   status: {
-    "type": payload.body.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.T_RETURN.item.TYPE default "",
-    number: payload.body.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.T_RETURN.item.NUMBER default "",
-    message: payload.body.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.T_RETURN.item.MESSAGE default ""
+    "type": payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.T_RETURN.item.item.TYPE default "",
+    number: payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.T_RETURN.item.NUMBER default "",
+    message: payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.T_RETURN.item.MESSAGE default ""
   }
-}]]></ee:set-payload>
+}
+
+]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 		<flow-ref doc:name="skipEmptyOrNull" doc:id="492efc9c-2a2e-4f0e-b9a0-d0cd1d562962" name="skipEmptyObject" />
