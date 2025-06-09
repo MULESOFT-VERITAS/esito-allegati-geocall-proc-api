@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mulexmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq"
+<mulexmlns:os="http://www.mulesoft.org/schema/mule/os"
 	
-xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
-		xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq"
+		xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
 	xmlns:cluster="http://www.mulesoft.org/schema/mule/ee/cluster"
 	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
 	xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
-	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
-	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
 http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
 http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
-http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd">
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
 
 	<configuration-properties
 		doc:name="ConfigurationPropertiesForCommon"
@@ -94,5 +95,6 @@ http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/m
 		<http:request-connection host="${nextGen.host}" port="${nextGen.port}" connectionIdleTimeout="${nextGen.connectionIdleTimeout}" protocol="${nextGen.protocol}" streamResponse="true"/>
 	</http:request-config>
 	<anypoint-mq:circuit-breaker name="Circuit_breaker" tripTimeout="15" doc:name="Circuit breaker" doc:id="fc6c58ca-b32d-4dca-bdff-913a60f2d07d" onErrorTypes="HTTP:NOT_FOUND,HTTP:SERVICE_UNAVAILABLE,HTTP:INTERNAL_SERVER_ERROR,HTTP:CONNECTIVITY,HTTP:TIMEOUT,HTTP:UNAUTHORIZED,HTTP:FORBIDDEN,WSC:CANNOT_DISPATCH,WSC:CONNECTIVITY,WSC:INVALID_WSDL,WSC:RETRY_EXHAUSTED,WSC:SOAP_FAULT,WSC:TIMEOUT" errorsThreshold="2" tripTimeoutUnit="SECONDS"/>
+	<os:object-store name="Object_store" doc:name="Object store" doc:id="c2649c1c-c315-4067-a06b-cb196b66b901" />
 
 </mule>

@@ -1,0 +1,5 @@
+%dw 2.0
+
+type auto_6e6a2768_54db_484f_afb7_22de0cff776d_Output_Variables_storedList = {|  |} {"typeId": "java.io.Serializable",
+"typeAlias": "Serializable"}
+

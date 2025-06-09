@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd 
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd 
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
-http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd">
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
 	<flow name="esito-allegati-geocall-proc-api">
         <http:listener path="/api/*" config-ref="HttpListenerConfig">
             <http:response statusCode="#[vars.httpStatus default 200]">
@@ -32,7 +33,9 @@ http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/m
 				<anypoint-mq:prefetch maxLocalMessages="${mq.max-local-message-geoCallProc}" />
 			</anypoint-mq:subscriber-type>
 		</anypoint-mq:subscriber>
+		<set-variable value="#[payload]" doc:name="savePayload" doc:id="d0c70e77-c6ea-4fed-8c45-c6640088cfd4" variableName="savePayload" />
 		<set-variable value="#[attributes.properties.corrlationId default correlationId]" doc:name="correlationId" doc:id="c918de7f-92a8-458f-8acb-9c4cf2413787" variableName="correlationId" />
+		<set-variable value="#[attributes.ackToken]" doc:name="ackToken" doc:id="3b4d3b58-e68b-44b5-b119-45623a74324a" variableName="ackToken" />
 		<logger level="INFO" doc:name="Log MessageId" doc:id="1e829eb3-1c81-4e26-b5b4-2e567098a71a" message='#["correlationId: " ++ vars.correlationId ++ " || " ++ "messageId: " ++ attributes.messageId default ""]'/>
 		<flow-ref doc:name="EsitoGeoCallAllegatiImpl" doc:id="7f4fcee9-9042-4da9-aa08-5132623fe3e1" name="EsitoGeoCallAllegatiImpl" />
 		<anypoint-mq:ack doc:name="Ack" doc:id="4d12447e-35ad-4e64-9db8-ffd6530a6aea" config-ref="Anypoint_MQ_Config" ackToken="#[vars.ackToken]"/>
