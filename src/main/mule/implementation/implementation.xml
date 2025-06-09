@@ -74,7 +74,7 @@ output application/json
     guid: payload.body.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item.GUID
   },
   status: {
-    "type": payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.T_RETURN.item.item.TYPE default "",
+    "type": payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.T_RETURN.item.TYPE default "",
     number: payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.T_RETURN.item.NUMBER default "",
     message: payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.T_RETURN.item.MESSAGE default ""
   }
