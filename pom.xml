@@ -101,7 +101,7 @@
 		<dependency>
 			<groupId>226a3f77-ef40-4d3d-a819-feecee080b3d</groupId>
 			<artifactId>esito-allegati-geocall-proc</artifactId>
-			<version>1.0.12</version>
+			<version>1.0.13</version>
 			<classifier>raml</classifier>
 			<type>zip</type>
 		</dependency>

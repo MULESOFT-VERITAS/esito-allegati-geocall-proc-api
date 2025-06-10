@@ -59,7 +59,7 @@ output application/json
 		<ee:transform doc:name="output" doc:id="07226aa5-c7ea-4940-b605-b16c960a1aa7" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
-output application/json 
+output application/json duplicateKeyAsArray = true
 ---
 {
   pratica: {
@@ -71,7 +71,9 @@ output application/json
     allegati_previsti: payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item.ALLEGATI_PREVISTI,
     allegati_ricevuti: payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item.ALLEGATI_RICEVUTI,
     allegati_elaborati: payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item.ALLEGATI_ELABORATI,
-    guid: payload.body.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item.GUID
+    guid: payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item.GUID,
+    allegati:  payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item.ALLEGATI
+
   },
   status: {
     "type": payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.T_RETURN.item.TYPE default "",

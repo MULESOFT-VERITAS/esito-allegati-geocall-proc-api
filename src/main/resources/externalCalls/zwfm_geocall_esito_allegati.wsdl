@@ -4,7 +4,7 @@
 		<sidl:sidl xmlns:sidl="http://www.sap.com/2007/03/sidl"/>
 	</wsdl:documentation>
 	<wsp:UsingPolicy wsdl:required="true"/>
-	<wsp:Policy wsu:Id="BN__Z_WFM_GEOCALL_ESITO_ALLEGATI">
+	<wsp:Policy wsu:Id="BN__ZWFM_GEOCALL_ESITO_ALLEGATI">
 		<wsp:ExactlyOne>
 			<wsp:All>
 				<sapattahnd:Enabled xmlns:sapattahnd="http://www.sap.com/710/features/attachment/">false</sapattahnd:Enabled>
@@ -68,7 +68,7 @@
 			</wsp:All>
 		</wsp:ExactlyOne>
 	</wsp:Policy>
-	<wsp:Policy wsu:Id="BN__Z_WFM_GEOCALL_ESITO_ALLEGATI_soap12">
+	<wsp:Policy wsu:Id="BN__ZWFM_GEOCALL_ESITO_ALLEGATI_soap12">
 		<wsp:ExactlyOne>
 			<wsp:All>
 				<sapattahnd:Enabled xmlns:sapattahnd="http://www.sap.com/710/features/attachment/">false</sapattahnd:Enabled>
@@ -216,6 +216,11 @@
 					<xsd:maxLength value="3"/>
 				</xsd:restriction>
 			</xsd:simpleType>
+			<xsd:simpleType name="char36">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="36"/>
+				</xsd:restriction>
+			</xsd:simpleType>
 			<xsd:simpleType name="char50">
 				<xsd:restriction base="xsd:string">
 					<xsd:maxLength value="50"/>
@@ -241,18 +246,6 @@
 			<xsd:simpleType name="string">
 				<xsd:restriction base="xsd:string"/>
 			</xsd:simpleType>
-			<xsd:complexType name="ZWFM_ALLEGATO_IN">
-				<xsd:sequence>
-					<xsd:element name="TIPO_ALLEGATO" type="tns:char2"/>
-					<xsd:element name="PROGRESSIVO" type="xsd:short"/>
-					<xsd:element name="NOME_FILE_ORIGINALE" type="tns:char60"/>
-					<xsd:element name="NOME_FILE_NORMALIZZATO" type="tns:char60"/>
-					<xsd:element name="DESCRIZIONE" type="tns:char60"/>
-					<xsd:element name="FORMATO" type="tns:char3"/>
-					<xsd:element name="DIMENSIONE" type="xsd:int"/>
-					<xsd:element name="CONT_FILE" type="tns:string"/>
-				</xsd:sequence>
-			</xsd:complexType>
 			<xsd:complexType name="BAPIRETURN1">
 				<xsd:sequence>
 					<xsd:element name="TYPE" type="tns:char1"/>
@@ -267,6 +260,31 @@
 					<xsd:element name="MESSAGE_V4" type="tns:char50"/>
 				</xsd:sequence>
 			</xsd:complexType>
+			<xsd:complexType name="ZWFM_ALLEGATO_IN">
+				<xsd:sequence>
+					<xsd:element name="TIPO_ALLEGATO" type="tns:char2"/>
+					<xsd:element name="PROGRESSIVO" type="xsd:short"/>
+					<xsd:element name="ID_ALLEGATO" type="tns:char36"/>
+					<xsd:element name="NOME_FILE_ORIGINALE" type="tns:char60"/>
+					<xsd:element name="NOME_FILE_NORMALIZZATO" type="tns:char60"/>
+					<xsd:element name="DESCRIZIONE" type="tns:char60"/>
+					<xsd:element name="FORMATO" type="tns:char3"/>
+					<xsd:element name="DIMENSIONE" type="xsd:int"/>
+					<xsd:element name="CONT_FILE" type="tns:string"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ZWFM_ALLEGATO_METADATI">
+				<xsd:sequence>
+					<xsd:element name="TIPO_ALLEGATO" type="tns:char2"/>
+					<xsd:element name="PROGRESSIVO" type="xsd:short"/>
+					<xsd:element name="ID_ALLEGATO" type="tns:char36"/>
+					<xsd:element name="NOME_FILE_ORIGINALE" type="tns:char60"/>
+					<xsd:element name="NOME_FILE_NORMALIZZATO" type="tns:char60"/>
+					<xsd:element name="DESCRIZIONE" type="tns:char60"/>
+					<xsd:element name="FORMATO" type="tns:char3"/>
+					<xsd:element name="DIMENSIONE" type="xsd:int"/>
+				</xsd:sequence>
+			</xsd:complexType>
 			<xsd:complexType name="ZGEOCALL_ESITO_ALLEG_STATO">
 				<xsd:sequence>
 					<xsd:element name="NOTIFICATIONNUMBERSAP" type="tns:char12"/>
@@ -276,6 +294,15 @@
 					<xsd:element name="ALLEGATI_PREVISTI" type="xsd:short"/>
 					<xsd:element name="ALLEGATI_RICEVUTI" type="xsd:short"/>
 					<xsd:element name="ALLEGATI_ELABORATI" type="tns:char1"/>
+					<xsd:element name="ALLEGATI" type="tns:ZGEOCALL_ESITO_ALLEG_STATO_D_T"/>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ZGEOCALL_ESITO_ALLEG_STATO_DET">
+				<xsd:sequence>
+					<xsd:element name="ID_ALLEGATO" type="tns:char36"/>
+					<xsd:element name="PROGRESSIVO" type="xsd:short"/>
+					<xsd:element name="RICEVUTO" type="tns:char1"/>
+					<xsd:element name="ELABORATO" type="tns:char1"/>
 				</xsd:sequence>
 			</xsd:complexType>
 			<xsd:complexType name="TABLE_OF_BAPIRETURN1">
@@ -288,29 +315,15 @@
 					<xsd:element name="item" type="tns:ZGEOCALL_ESITO_ALLEG_STATO" minOccurs="0" maxOccurs="unbounded"/>
 				</xsd:sequence>
 			</xsd:complexType>
+			<xsd:complexType name="ZGEOCALL_ESITO_ALLEG_STATO_D_T">
+				<xsd:sequence>
+					<xsd:element name="item" type="tns:ZGEOCALL_ESITO_ALLEG_STATO_DET" minOccurs="0" maxOccurs="unbounded"/>
+				</xsd:sequence>
+			</xsd:complexType>
 			<xsd:element name="Z_WS_GEOCALL_ESITO_ALLEGATI">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="ALLEGATO_01" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
-						<xsd:element name="ALLEGATO_02" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
-						<xsd:element name="ALLEGATO_03" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
-						<xsd:element name="ALLEGATO_04" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
-						<xsd:element name="ALLEGATO_05" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
-						<xsd:element name="ALLEGATO_06" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
-						<xsd:element name="ALLEGATO_07" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
-						<xsd:element name="ALLEGATO_08" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
-						<xsd:element name="ALLEGATO_09" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
-						<xsd:element name="ALLEGATO_10" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
-						<xsd:element name="ALLEGATO_11" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
-						<xsd:element name="ALLEGATO_12" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
-						<xsd:element name="ALLEGATO_13" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
-						<xsd:element name="ALLEGATO_14" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
-						<xsd:element name="ALLEGATO_15" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
-						<xsd:element name="ALLEGATO_16" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
-						<xsd:element name="ALLEGATO_17" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
-						<xsd:element name="ALLEGATO_18" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
-						<xsd:element name="ALLEGATO_19" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
-						<xsd:element name="ALLEGATO_20" type="tns:ZWFM_ALLEGATO_IN" minOccurs="0"/>
+						<xsd:element name="ALLEGATO" type="tns:ZWFM_ALLEGATO_IN"/>
 						<xsd:element name="EXTERNALCODE" type="tns:char12"/>
 						<xsd:element name="NOTIFICATIONNUMBERSAP" type="tns:char12"/>
 						<xsd:element name="TOTALE_ALLEGATI" type="xsd:short"/>
@@ -329,6 +342,26 @@
 			<xsd:element name="Z_WS_GEOCALL_ESITO_ALLEG_LISTA">
 				<xsd:complexType>
 					<xsd:sequence>
+						<xsd:element name="ALLEGATO_01" type="tns:ZWFM_ALLEGATO_METADATI" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_02" type="tns:ZWFM_ALLEGATO_METADATI" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_03" type="tns:ZWFM_ALLEGATO_METADATI" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_04" type="tns:ZWFM_ALLEGATO_METADATI" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_05" type="tns:ZWFM_ALLEGATO_METADATI" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_06" type="tns:ZWFM_ALLEGATO_METADATI" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_07" type="tns:ZWFM_ALLEGATO_METADATI" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_08" type="tns:ZWFM_ALLEGATO_METADATI" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_09" type="tns:ZWFM_ALLEGATO_METADATI" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_10" type="tns:ZWFM_ALLEGATO_METADATI" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_11" type="tns:ZWFM_ALLEGATO_METADATI" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_12" type="tns:ZWFM_ALLEGATO_METADATI" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_13" type="tns:ZWFM_ALLEGATO_METADATI" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_14" type="tns:ZWFM_ALLEGATO_METADATI" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_15" type="tns:ZWFM_ALLEGATO_METADATI" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_16" type="tns:ZWFM_ALLEGATO_METADATI" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_17" type="tns:ZWFM_ALLEGATO_METADATI" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_18" type="tns:ZWFM_ALLEGATO_METADATI" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_19" type="tns:ZWFM_ALLEGATO_METADATI" minOccurs="0"/>
+						<xsd:element name="ALLEGATO_20" type="tns:ZWFM_ALLEGATO_METADATI" minOccurs="0"/>
 						<xsd:element name="EXTERNALCODE" type="tns:char12"/>
 						<xsd:element name="NOTIFICATIONNUMBERSAP" type="tns:char12"/>
 						<xsd:element name="TOTALE_ALLEGATI" type="xsd:short"/>
@@ -414,9 +447,9 @@
 			<wsdl:output message="tns:Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse"/>
 		</wsdl:operation>
 	</wsdl:portType>
-	<wsdl:binding name="Z_WFM_GEOCALL_ESITO_ALLEGATI" type="tns:Z_WFM_GEOCALL_ESITO_ALLEGATI">
+	<wsdl:binding name="ZWFM_GEOCALL_ESITO_ALLEGATI" type="tns:Z_WFM_GEOCALL_ESITO_ALLEGATI">
 		<wsp:Policy>
-			<wsp:PolicyReference URI="#BN__Z_WFM_GEOCALL_ESITO_ALLEGATI"/>
+			<wsp:PolicyReference URI="#BN__ZWFM_GEOCALL_ESITO_ALLEGATI"/>
 		</wsp:Policy>
 		<soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
 		<wsdl:operation name="Z_WS_GEOCALL_ESITO_ALLEGATI">
@@ -447,9 +480,9 @@
 			</wsdl:output>
 		</wsdl:operation>
 	</wsdl:binding>
-	<wsdl:binding name="Z_WFM_GEOCALL_ESITO_ALLEGATI_soap12" type="tns:Z_WFM_GEOCALL_ESITO_ALLEGATI">
+	<wsdl:binding name="ZWFM_GEOCALL_ESITO_ALLEGATI_soap12" type="tns:Z_WFM_GEOCALL_ESITO_ALLEGATI">
 		<wsp:Policy>
-			<wsp:PolicyReference URI="#BN__Z_WFM_GEOCALL_ESITO_ALLEGATI_soap12"/>
+			<wsp:PolicyReference URI="#BN__ZWFM_GEOCALL_ESITO_ALLEGATI_soap12"/>
 		</wsp:Policy>
 		<wsoap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
 		<wsdl:operation name="Z_WS_GEOCALL_ESITO_ALLEGATI">
@@ -480,12 +513,12 @@
 			</wsdl:output>
 		</wsdl:operation>
 	</wsdl:binding>
-	<wsdl:service name="Z_WFM_GEOCALL_ESITO_ALLEGATI">
-		<wsdl:port name="Z_WFM_GEOCALL_ESITO_ALLEGATI" binding="tns:Z_WFM_GEOCALL_ESITO_ALLEGATI">
-			<soap:address location="https://s4test.gruppoveritas.it/sap/bc/srt/rfc/sap/z_wfm_geocall_esito_allegati/300/z_wfm_geocall_esito_allegati/z_wfm_geocall_esito_allegati"/>
+	<wsdl:service name="ZWFM_GEOCALL_ESITO_ALLEGATI">
+		<wsdl:port name="ZWFM_GEOCALL_ESITO_ALLEGATI" binding="tns:ZWFM_GEOCALL_ESITO_ALLEGATI">
+			<soap:address location="https://s4test.gruppoveritas.it/sap/bc/srt/rfc/sap/z_wfm_geocall_esito_allegati/300/zwfm_geocall_esito_allegati/zwfm_geocall_esito_allegati"/>
 		</wsdl:port>
-		<wsdl:port name="Z_WFM_GEOCALL_ESITO_ALLEGATI_soap12" binding="tns:Z_WFM_GEOCALL_ESITO_ALLEGATI_soap12">
-			<wsoap12:address location="https://s4test.gruppoveritas.it/sap/bc/srt/rfc/sap/z_wfm_geocall_esito_allegati/300/z_wfm_geocall_esito_allegati/z_wfm_geocall_esito_allegati"/>
+		<wsdl:port name="ZWFM_GEOCALL_ESITO_ALLEGATI_soap12" binding="tns:ZWFM_GEOCALL_ESITO_ALLEGATI_soap12">
+			<wsoap12:address location="https://s4test.gruppoveritas.it/sap/bc/srt/rfc/sap/z_wfm_geocall_esito_allegati/300/zwfm_geocall_esito_allegati/zwfm_geocall_esito_allegati"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>

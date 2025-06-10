@@ -73,18 +73,7 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 				<http:basic-authentication username="${sap.user}" password="${secure::sap.password}" />
 			</http:authentication>
 		</http:request-connection>
-	</http:request-config>	
-	<wsc:config name="Web_Service_Consumer_Config" doc:name="Web Service Consumer Config" doc:id="786354d5-fd29-45df-af80-3a018481368d" >
-		<wsc:connection wsdlLocation="externalCalls\zwfm_geocall_esito_allegati.wsdl" service="Z_WFM_GEOCALL_ESITO_ALLEGATI" port="Z_WFM_GEOCALL_ESITO_ALLEGATI" address="${sap.address}" >
-			<reconnection >
-				<reconnect frequency="${http.frequency}" count="${http.reconnection}" />
-			</reconnection>
-			<wsc:custom-transport-configuration >
-				<wsc:http-transport-configuration requesterConfig="HTTP_Configuration_SAP" />
-			</wsc:custom-transport-configuration>
-			<wsc:web-service-security actor="http://schemas.xmlsoap.org/soap/actor/next" />
-		</wsc:connection>
-	</wsc:config>
+	</http:request-config>
 	<http:request-config name="HttpSystemRequestConfig" doc:name="HTTPRequestconfiguration" doc:id="fc4782fb-7831-4097-bcb2-43aaca1a4101" basePath="${system.basePath}" sendCorrelationId="ALWAYS" responseTimeout="${system.responseTimeout}">
 		<http:request-connection host="${system.host}" port="${system.port}" connectionIdleTimeout="${system.connectionIdleTimeout}" protocol="${system.protocol}" />
 	</http:request-config>
@@ -95,6 +84,13 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 		<http:request-connection host="${nextGen.host}" port="${nextGen.port}" connectionIdleTimeout="${nextGen.connectionIdleTimeout}" protocol="${nextGen.protocol}" streamResponse="true"/>
 	</http:request-config>
 	<anypoint-mq:circuit-breaker name="Circuit_breaker" tripTimeout="15" doc:name="Circuit breaker" doc:id="fc6c58ca-b32d-4dca-bdff-913a60f2d07d" onErrorTypes="HTTP:NOT_FOUND,HTTP:SERVICE_UNAVAILABLE,HTTP:INTERNAL_SERVER_ERROR,HTTP:CONNECTIVITY,HTTP:TIMEOUT,HTTP:UNAUTHORIZED,HTTP:FORBIDDEN,WSC:CANNOT_DISPATCH,WSC:CONNECTIVITY,WSC:INVALID_WSDL,WSC:RETRY_EXHAUSTED,WSC:SOAP_FAULT,WSC:TIMEOUT" errorsThreshold="2" tripTimeoutUnit="SECONDS"/>
-	<os:object-store name="Object_store" doc:name="Object store" doc:id="c2649c1c-c315-4067-a06b-cb196b66b901" />
+	<os:object-store name="Object_store" doc:name="Object store" doc:id="c2649c1c-c315-4067-a06b-cb196b66b901" expirationInterval="${store.expirationInterval}" expirationIntervalUnit="HOURS"/>
+	<wsc:config name="Web_Service_Consumer_Config" doc:name="Web Service Consumer Config" doc:id="1de81431-fd40-4cf5-b7c7-8ef5f1b3823b" >
+		<wsc:connection wsdlLocation="externalCalls\zwfm_geocall_esito_allegati.wsdl" service="ZWFM_GEOCALL_ESITO_ALLEGATI" port="ZWFM_GEOCALL_ESITO_ALLEGATI" address="${sap.address}" >
+			<wsc:custom-transport-configuration >
+				<wsc:http-transport-configuration requesterConfig="HTTP_Configuration_SAP" />
+			</wsc:custom-transport-configuration>
+		</wsc:connection>
+	</wsc:config>
 
 </mule>

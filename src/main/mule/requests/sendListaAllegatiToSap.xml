@@ -12,16 +12,34 @@ http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/
 				<ee:set-payload><![CDATA[%dw 2.0
 output application/xml
 ns urn urn:sap-com:document:sap:rfc:functions
-
 ---
-urn#Z_WS_GEOCALL_ESITO_ALLEG_LISTA: {
-  EXTERNALCODE: payload.pratica.externalCode,
-  NOTIFICATIONNUMBERSAP: payload.pratica.notificationNumberSap,
-  TOTALE_ALLEGATI: sizeOf(payload.listaAllegati),
-  "T_RETURN": "",
-  WOCODE: payload.pratica.wocode
-  
-}
+urn#Z_WS_GEOCALL_ESITO_ALLEG_LISTA:
+  vars.savePayload.listaAllegati reduce ((item, acc = {}) -> do {
+    var index = sizeOf(acc)
+    var num = index + 1
+    var padded = if (num < 10) "0" ++ (num as String) else (num as String)
+    var key = "ALLEGATO_" ++ padded
+    --- acc ++ {
+      (key): {
+        TIPO_ALLEGATO: item.tipoAllegato,
+        PROGRESSIVO: num,
+        ID_ALLEGATO: item.idAllegato,
+        NOME_FILE_ORIGINALE: item.nomeFileOriginale,
+        NOME_FILE_NORMALIZZATO: item.nomeFileNormalizzato,
+        DESCRIZIONE: item.descrizione,
+        FORMATO: upper(item.formato), 
+        DIMENSIONE: item.dimensione
+      }
+    }
+  }) ++ {
+    EXTERNALCODE: vars.savePayload.pratica.externalCode,
+    NOTIFICATIONNUMBERSAP: vars.savePayload.pratica.notificationNumberSap,
+    TOTALE_ALLEGATI: sizeOf(vars.savePayload.listaAllegati),
+    T_RETURN: "",
+    WOCODE: vars.savePayload.pratica.wocode,
+    
+    
+  }
 ]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
