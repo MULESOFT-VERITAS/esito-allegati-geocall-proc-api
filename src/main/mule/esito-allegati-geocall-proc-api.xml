@@ -27,12 +27,12 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 		<error-handler ref="Global_Error_Handler" />
 	</flow>
 	<flow name="esito-allegati-geocall-proc-sub" doc:id="35067412-781d-48a4-9d90-37e55aab8648" maxConcurrency="4">
-		<anypoint-mq:subscriber doc:name="Subscriber" doc:id="f50ca782-f42b-4d03-ba24-9853baf89e5f" config-ref="Anypoint_MQ_Config" destination="${mq.esito-allegati}" acknowledgementMode="MANUAL" circuitBreaker="Circuit_breaker">
+		<!-- [STUDIO:"Subscriber"]<anypoint-mq:subscriber doc:name="Subscriber" doc:id="f50ca782-f42b-4d03-ba24-9853baf89e5f" config-ref="Anypoint_MQ_Config" destination="${mq.esito-allegati}" acknowledgementMode="MANUAL" circuitBreaker="Circuit_breaker">
 			<reconnect frequency="${mq.frequency}" count="${mq.reconnection}" />
 			<anypoint-mq:subscriber-type >
 				<anypoint-mq:prefetch maxLocalMessages="${mq.max-local-message-geoCallProc}" />
 			</anypoint-mq:subscriber-type>
-		</anypoint-mq:subscriber>
+		</anypoint-mq:subscriber> [STUDIO] -->
 		<set-variable value="#[payload]" doc:name="savePayload" doc:id="d0c70e77-c6ea-4fed-8c45-c6640088cfd4" variableName="savePayload" />
 		<set-variable value="#[attributes.properties.corrlationId default correlationId]" doc:name="correlationId" doc:id="c918de7f-92a8-458f-8acb-9c4cf2413787" variableName="correlationId" />
 		<set-variable value="#[attributes.ackToken]" doc:name="ackToken" doc:id="3b4d3b58-e68b-44b5-b119-45623a74324a" variableName="ackToken" />

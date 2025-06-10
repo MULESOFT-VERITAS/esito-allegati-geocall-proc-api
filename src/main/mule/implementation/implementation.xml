@@ -56,32 +56,45 @@ output application/json
 	<sub-flow name="GetStatoEsitoAllegatiToSapImpl" doc:id="b99d72cc-d542-49c2-bfd9-02d9bd7f1ef8" >
 		<set-variable value="#[payload]" doc:name="savePayload" doc:id="6c3fbe38-50f1-4162-bcf0-be835708fb37" variableName="savePayload" />
 		<flow-ref doc:name="getStatoEsitoAllegatiToSap" doc:id="d2f192e2-d45d-425f-9e71-4ed310a2b4f0" name="getStatoEsitoAllegatiToSap"/>
-		<ee:transform doc:name="output" doc:id="07226aa5-c7ea-4940-b605-b16c960a1aa7" >
+		<ee:transform doc:name="TransformXMLtoJson" doc:id="07226aa5-c7ea-4940-b605-b16c960a1aa7" >
 			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
-output application/json duplicateKeyAsArray = true
+				<ee:set-payload ><![CDATA[output json duplicateKeyAsArray = true
 ---
+payload.body]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="output" doc:id="c04b9eba-8efd-4f12-a951-af82726e1984">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+var items = payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item
+---
+
 {
-  pratica: {
-    notificationNumberSap: vars.savePayload.notificationNumberSap,
+pratica: {
+	notificationNumberSap: vars.savePayload.notificationNumberSap,
     externalCode: vars.savePayload.externalCode,
     wocode: vars.savePayload.wocode
-  },
-  stato_allegati: {
-    allegati_previsti: payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item.ALLEGATI_PREVISTI,
-    allegati_ricevuti: payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item.ALLEGATI_RICEVUTI,
-    allegati_elaborati: payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item.ALLEGATI_ELABORATI,
-    id_esito: payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item.ID_ESITO,
-    allegati:  payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item.ALLEGATI
-
-  },
+},
+stato_allegati: {
+  allegati_previsti: items map ((item) -> (item.ALLEGATI_PREVISTI as Number)) reduce ((value, acc = 0) -> acc + value),
+  allegati_ricevuti: items map ((item) -> (item.ALLEGATI_RICEVUTI as Number)) reduce ((value, acc = 0) -> acc + value),
+  allegati_elaborati: sizeOf (
+    items flatMap ((item) -> 
+      item.ALLEGATI.item filter (a) -> a.ELABORATO == "X"
+    )
+  ),
+  allegati: items flatMap ((item) ->
+    item.ALLEGATI.item map ((a) ->
+      a ++ { ID_ESITO: item.ID_ESITO }
+    )
+  )
+},
   status: {
     "type": payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.T_RETURN.item.TYPE default "",
     number: payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.T_RETURN.item.NUMBER default "",
     message: payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.T_RETURN.item.MESSAGE default ""
-  }
-}
-
+  }}
 ]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
