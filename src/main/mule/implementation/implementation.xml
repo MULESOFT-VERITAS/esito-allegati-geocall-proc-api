@@ -125,9 +125,10 @@ soapenv#Envelope @('xmlns:ser': "http://services.sol.atos.net/") :{
     },
     soapenv#Body:
 		urn#Z_WS_GEOCALL_ESITO_ALLEGATI: {
-  			ALLEGATO_01: {
+  			ALLEGATO: {
     			TIPO_ALLEGATO: vars.savePayload.allegato.tipoAllegato,
     			PROGRESSIVO: vars.savePayload.properties.progressivoAllegato,
+				ID_ALLEGATO: vars.savePayload.allegato.idAllegato,
     			NOME_FILE_ORIGINALE: vars.savePayload.allegato.nomeFileOriginale,
     			NOME_FILE_NORMALIZZATO: vars.savePayload.allegato.nomeFileNormalizzato,
     			DESCRIZIONE: vars.savePayload.allegato.descrizione,
