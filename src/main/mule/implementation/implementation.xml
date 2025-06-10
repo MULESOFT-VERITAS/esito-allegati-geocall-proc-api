@@ -71,7 +71,7 @@ output application/json duplicateKeyAsArray = true
     allegati_previsti: payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item.ALLEGATI_PREVISTI,
     allegati_ricevuti: payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item.ALLEGATI_RICEVUTI,
     allegati_elaborati: payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item.ALLEGATI_ELABORATI,
-    guid: payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item.GUID,
+    id_esito: payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item.ID_ESITO,
     allegati:  payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item.ALLEGATI
 
   },

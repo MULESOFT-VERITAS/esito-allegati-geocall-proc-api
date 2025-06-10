@@ -290,7 +290,7 @@
 					<xsd:element name="NOTIFICATIONNUMBERSAP" type="tns:char12"/>
 					<xsd:element name="EXTERNALCODE" type="tns:char12"/>
 					<xsd:element name="WOCODE" type="tns:char255"/>
-					<xsd:element name="GUID" type="tns:char22"/>
+					<xsd:element name="ID_ESITO" type="tns:char22"/>
 					<xsd:element name="ALLEGATI_PREVISTI" type="xsd:short"/>
 					<xsd:element name="ALLEGATI_RICEVUTI" type="xsd:short"/>
 					<xsd:element name="ALLEGATI_ELABORATI" type="tns:char1"/>
