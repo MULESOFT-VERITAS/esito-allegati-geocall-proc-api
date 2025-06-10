@@ -15,7 +15,7 @@
 	     "host": "veritas.fsm-test.overit.cloud",
 	     "port": "443",
 	     "basepath": "",
-	     "path": "https://veritas.fsm-test.overit.cloud/veritaswfm"
+	     "path": "/veritaswfm"
      }
 ]
 
