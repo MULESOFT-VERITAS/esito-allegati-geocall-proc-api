@@ -1,11 +1,22 @@
 [
 	{
-		"name": "hello-cloud",
+		"name": "get-sap",
 		"tier": "system", 
-	     "protocol": "http",
-	     "host": "am-sample-system-api.de-c1.cloudhub.io",
-	     "port": "80",
+	     "protocol": "https",
+	     "host": "s4test.gruppoveritas.it",
+	     "port": "443",
 	     "basepath": "",
-	     "path": "/hello"
+	     "path": "/sap/bc/srt/rfc/sap/z_wfm_geocall_esito_allegati/300/zwfm_geocall_esito_allegati/zwfm_geocall_esito_allegati"
+     },
+     	{
+		"name": "get-nextgen",
+		"tier": "system", 
+	     "protocol": "https",
+	     "host": "veritas.fsm-test.overit.cloud",
+	     "port": "443",
+	     "basepath": "",
+	     "path": "/veritaswfm"
      }
 ]
+
+
