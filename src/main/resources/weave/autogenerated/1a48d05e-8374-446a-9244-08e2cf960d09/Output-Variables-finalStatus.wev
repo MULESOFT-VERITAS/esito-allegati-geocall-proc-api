@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_1a48d05e_8374_446a_9244_08e2cf960d09_Output_Variables_finalStatus = {| dependencies: Array<Nothing> |}
+

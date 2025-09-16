@@ -1,0 +1,7 @@
+%dw 2.0
+
+type auto_367f6462_5628_4674_aa82_778d517d6887_Output_Payload = {
+  message: String, 
+  _?: Any
+}
+

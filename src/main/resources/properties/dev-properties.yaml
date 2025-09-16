@@ -1,0 +1,41 @@
+http:
+  port: "8081"
+  private: 
+    port: "8091"
+https:
+  port: "8082"
+api: 
+  id: "2561368"
+system:
+    protocol: "HTTP"
+    host: "does-not-exist.cloudhub.io"
+    port: "80"
+    basePath: "/"
+    connectionIdleTimeout: "10000"
+    responseTimeout: "5000"
+sap:
+    protocol: "HTTPS"
+    user: "SOA_GEOCALL"
+    host: "s4test.gruppoveritas.it"
+    port: "443"
+    address: "https://s4test.gruppoveritas.it/sap/bc/srt/rfc/sap/z_wfm_geocall_esito_allegati/300/zwfm_geocall_esito_allegati/zwfm_geocall_esito_allegati"
+    uri: "/sap/bc/srt/rfc/sap/z_wfm_geocall_esito_allegati/300/zwfm_geocall_esito_allegati/zwfm_geocall_esito_allegati"
+nextGen:
+    protocol: "HTTPS"
+    host: "veritas.fsm-test.overit.cloud"
+    port: "443"
+    basePath: "/"
+    connectionIdleTimeout: "10000"
+    responseTimeout: "60000" 
+    services:
+      outComeAttachments: "/veritaswfm/api/r1/outcome-attachments/{idAllegato}"
+mq:
+  host: "https://mq-eu-central-1.eu1.anypoint.mulesoft.com/api/v1/organizations/226a3f77-ef40-4d3d-a819-feecee080b3d/environments/5efc06a9-c21e-4e3e-8c98-da9724d06faf"
+  client_id: "4df09069169d4272aca6e297c228364a"
+  esito-allegati: "DEV-QUEUE-allegati-geocall-lista"
+  max-local-message-geoCallProc: "8"
+store:
+  expirationInterval: "1"
+log:
+  level: "DEBUG"
+ 

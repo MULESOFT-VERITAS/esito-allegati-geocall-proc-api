@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<sub-flow name="getAttachFromGeoCallSub" doc:id="6c8c2254-d194-4fb9-934d-0b7d8f164b17" >
+		<logger level="INFO" doc:name="Start" doc:id="dc37b983-ec6d-43fe-95e8-4e4886953805" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;START GetAttachments to GEOCALL&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: vars.correlationId default correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
+		<http:request method="GET" doc:name="NextGenOutComeAttachments" doc:id="f1e47bef-9b78-4e1f-856a-b1649d28e2e3" config-ref="HttpNextGenRequestConfig" path="${nextGen.services.outComeAttachments}" target="outputGetAttachmentsGeoCall">
+			<non-repeatable-stream />
+			<reconnect frequency="${http.frequency}" count="${http.reconnection}"/>
+			<http:headers><![CDATA[#[output application/json
+---
+{
+	"Content-Type" : "application/json",
+	"Accept": "application/json",
+	"X-Apy-Key": Mule::p('secure::nextGen.api-key')
+}]]]></http:headers>
+			<http:uri-params ><![CDATA[#[output application/json
+---
+
+{
+	idAllegato : payload.idAllegato
+}]]]></http:uri-params>
+		</http:request>
+		<logger level="INFO" doc:name="END" doc:id="31bd5d54-5f53-4d4c-851d-320ee0aa6975" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = {messaggio: &quot;allegato scaricato&quot;} default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;END GetAttachments from GEOCALL&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: vars.correlationId default correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
+		<ee:transform doc:name="outputGetAttachmentsFromGeoCall" doc:id="551f7029-312f-4a85-ba4d-62ee702461b6" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+
+payload ++  "contFile": vars.outputGetAttachmentsGeoCall.attachmentContent
+    ]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+</mule>

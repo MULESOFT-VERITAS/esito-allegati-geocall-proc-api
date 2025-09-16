@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd 
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+	<flow name="esito-allegati-geocall-proc-api">
+        <http:listener path="/api/*" config-ref="HttpListenerConfig">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <set-variable value="#[attributes.headers.'x-correlation-id' default correlationId]" doc:name="correlationId" doc:id="0b26ba0a-425d-476e-b9a6-a33744f0dce3" variableName="correlationId" />
+		<logger level="INFO" doc:name="START" doc:id="ef3c9f6a-3ac7-4393-831d-acf4824bc91a" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = if(attributes.maskedRequestPath == &quot;/v1/esito/allegati&quot;) &quot;START GeocallEsitoAllegati&quot; else &quot;START GeocallStatoEsitoAllegati&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10; {&#10;  correlationId: correlationId,&#10;  app: app,&#10;  mule: mule,&#10;  status: status,&#10;  message: msg,&#10;  (payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),   &#10;  env: p('mule.env')&#10; }&#10;)]" />
+		<apikit:router config-ref="esito-allegati-geocall-proc-config" />
+        <error-handler ref="Apikit_Error_Handler" />
+    </flow>
+	<flow name="post:\v1\esito\allegati:application\json:esito-allegati-geocall-proc-config" doc:id="bd26fd39-89a6-4057-ad26-5f29016bfc61">
+		<flow-ref doc:name="SendListaAllegatiImpl" doc:id="e2d6a524-2c8f-4c92-89fe-28fd237c7484" name="SendListaAllegatiImpl" />
+		<error-handler ref="Global_Error_Handler" />
+	</flow>
+	<flow name="post:\v1\stato\esito\allegati:application\json:esito-allegati-geocall-proc-config" doc:id="dad45ad9-c78a-46a6-8b59-44e1e5ac1023">
+		<flow-ref doc:name="GetStatoEsitoAllegatiToSapImpl" doc:id="62e5d05b-e2aa-482b-8b62-b4302504c196" name="GetStatoEsitoAllegatiToSapImpl" />
+		<error-handler ref="Global_Error_Handler" />
+	</flow>
+	<flow name="esito-allegati-geocall-proc-sub" doc:id="35067412-781d-48a4-9d90-37e55aab8648" maxConcurrency="4">
+		<anypoint-mq:subscriber doc:name="Subscriber" doc:id="f50ca782-f42b-4d03-ba24-9853baf89e5f" config-ref="Anypoint_MQ_Config" destination="${mq.esito-allegati}" acknowledgementMode="MANUAL" circuitBreaker="Circuit_breaker">
+			<reconnect frequency="${mq.frequency}" count="${mq.reconnection}" />
+			<anypoint-mq:subscriber-type >
+				<anypoint-mq:prefetch maxLocalMessages="${mq.max-local-message-geoCallProc}" />
+			</anypoint-mq:subscriber-type>
+		</anypoint-mq:subscriber>
+		<set-variable value="#[payload]" doc:name="savePayload" doc:id="d0c70e77-c6ea-4fed-8c45-c6640088cfd4" variableName="savePayload" />
+		<set-variable value="#[attributes.properties.corrlationId default correlationId]" doc:name="correlationId" doc:id="c918de7f-92a8-458f-8acb-9c4cf2413787" variableName="correlationId" />
+		<set-variable value="#[attributes.ackToken]" doc:name="ackToken" doc:id="3b4d3b58-e68b-44b5-b119-45623a74324a" variableName="ackToken" />
+		<logger level="INFO" doc:name="Log MessageId" doc:id="1e829eb3-1c81-4e26-b5b4-2e567098a71a" message='#["correlationId: " ++ vars.correlationId ++ " || " ++ "messageId: " ++ attributes.messageId default ""]'/>
+		<flow-ref doc:name="EsitoGeoCallAllegatiImpl" doc:id="7f4fcee9-9042-4da9-aa08-5132623fe3e1" name="EsitoGeoCallAllegatiImpl" />
+		<anypoint-mq:ack doc:name="Ack" doc:id="4d12447e-35ad-4e64-9db8-ffd6530a6aea" config-ref="Anypoint_MQ_Config" ackToken="#[vars.ackToken]"/>
+		<error-handler ref="Global_Error_Handler" />
+	</flow>
+	<flow name="esito-allegati-geocall-proc-health" doc:id="9940f9bd-f322-48f2-b7a1-afbcfc927887">
+		<http:listener doc:name="Listener" doc:id="03e7095a-9069-43ae-997e-91c6579c3d2c" config-ref="HttpListenerConfig" path="/api/health/*">
+			<http:response statusCode="#[vars.httpStatus default 200]">
+				<http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+			</http:response>
+			<http:error-response statusCode="#[vars.httpStatus default 500]">
+				<http:body><![CDATA[#[payload]]]></http:body>
+				<http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+			</http:error-response>
+		</http:listener>
+		<choice doc:name="Choice" doc:id="3e09d8f5-e853-470d-8cfa-82c6954f4f47">
+			<when expression='#[attributes.maskedRequestPath == "/hello"]'>
+				<flow-ref doc:name="Hello" doc:id="85064f4b-c44d-4acb-bce6-9f81a04ad147" name="get:\hello:esito-allegati-geocall-proc-api-config" />
+			</when>
+			<when expression='#[attributes.maskedRequestPath == "/liveliness-probe"]'>
+				<flow-ref doc:name="LivelinessProbe" doc:id="4378bda2-0ccd-4fa2-a501-be88c1c87a48" name="get:\health-check\liveliness-probe:esito-allegati-geocall-proc-api-config" />
+			</when>
+			<when expression='#[attributes.maskedRequestPath == "/readiness-probe"]'>
+				<flow-ref doc:name="ReadinessProbe" doc:id="1097b634-5b54-4744-b91f-d04e95646074" name="get:\health-check\readiness-probe:esito-allegati-geocall-proc-api-config" />
+			</when>
+			<otherwise>
+				<ee:transform doc:name="OutputHealth" doc:id="580fb9a5-d5d0-41ac-9a1b-aef824963f3c">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+    "outputPayload": "App Status OK"
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
+		<error-handler ref="Global_Error_Handler" />
+	</flow>
+	<flow name="get:\hello:esito-allegati-geocall-proc-api-config" doc:id="a8d0d92b-452f-4032-929e-dbb53a00d6d1">
+<logger level="INFO" doc:name="log-request-received" doc:id="f535de45-8963-422e-8a7c-0824d05c8146" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;HTTP Request Received - Start Flow&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10;	{&#10;		correlationId: correlationId,&#10;		app: app,&#10;		mule: mule,&#10;		status: status,&#10;		message: msg,&#10;		(payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),		 &#10;		env: p('mule.env')&#10;	}&#10;)]" />			
+        <flow-ref doc:name="hello-implementation" doc:id="958a3932-e3bf-41d1-aab5-1a5376d5284b" name="hello-implementation"/>
+<logger level="INFO" doc:name="log-response" doc:id="06de949b-819c-403b-aa09-2b1ff43fee9f" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;Processing Complete - End Flow&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10;	{&#10;		correlationId: correlationId,&#10;		app: app,&#10;		mule: mule,&#10;		status: status,&#10;		message: msg,&#10;		(payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),		 &#10;		env: p('mule.env')&#10;	}&#10;)]" />
+		<error-handler ref="Global_Error_Handler" />			
+	</flow>
+	<flow name="get:\health-check\liveliness-probe:esito-allegati-geocall-proc-api-config" doc:id="4850c785-b5d3-492f-8a39-0a33f43c9427" >
+<logger level="INFO" doc:name="log-request-received" doc:id="50c5502e-9e60-4ff2-82d9-9e95f389a0c7" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;Request Received for liveliness probe flow&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10;	{&#10;		correlationId: correlationId,&#10;		app: app,&#10;		mule: mule,&#10;		status: status,&#10;		message: msg,&#10;		(payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),		 &#10;		env: p('mule.env')&#10;	}&#10;)]" />			
+        <flow-ref doc:name="health-liveness-probe" doc:id="d5408dbc-7425-4e6d-bcb2-5d9b360480c0" name="health-liveness-probe"/>
+<logger level="INFO" doc:name="log-response" doc:id="0e99661c-d2ad-4f1e-8ec6-2ecb84c8738e" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;Response Received for liveliness probe flow&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10;	{&#10;		correlationId: correlationId,&#10;		app: app,&#10;		mule: mule,&#10;		status: status,&#10;		message: msg,&#10;		(payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),		 &#10;		env: p('mule.env')&#10;	}&#10;)]" />
+		<error-handler ref="Global_Error_Handler" />			
+	</flow>
+	<flow name="get:\health-check\readiness-probe:esito-allegati-geocall-proc-api-config" doc:id="6c15c5d0-4ef0-4090-9d76-247f9350f527" >
+<logger level="INFO" doc:name="log-request-received" doc:id="46be914b-1f3a-467c-839f-cb70f75744b9" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;Request Received for readiness probe flow&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10;	{&#10;		correlationId: correlationId,&#10;		app: app,&#10;		mule: mule,&#10;		status: status,&#10;		message: msg,&#10;		(payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),		 &#10;		env: p('mule.env')&#10;	}&#10;)]" />			
+	 <flow-ref doc:name="health-readiness-probe" doc:id="5ff0ef15-f4d4-4184-a93c-e5217e3abd5e" name="health-readiness-probe"/>
+<logger level="INFO" doc:name="log-response" doc:id="09fefce1-0266-4b8e-9135-497f66ead250" message="#[%dw 2.0&#10;output application/json skipNullOn=&quot;everywhere&quot;&#10;&#10;&#10;var logPayload = payload default &quot;&quot;&#10;var status = &quot;ok&quot;&#10;var msg = &quot;Response Received for readiness probe flow&quot;&#10;&#10;---&#10;CustomLogMapper::logger(&#10;	{&#10;		correlationId: correlationId,&#10;		app: app,&#10;		mule: mule,&#10;		status: status,&#10;		message: msg,&#10;		(payload: logPayload) if (p('log.level') == &quot;DEBUG&quot;),		 &#10;		env: p('mule.env')&#10;	}&#10;)]" />
+		<error-handler ref="Global_Error_Handler" />			
+	</flow>
+</mule>

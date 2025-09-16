@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns="http://www.mulesoft.org/schema/mule/core"
+    xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
+        http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+        http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+
+    <sub-flow name="storeIdAllegato" doc:id="6e6a2768-54db-484f-afb7-22de0cff776d">
+
+        
+        <try doc:name="Try" doc:id="81003342-f160-42ee-bed9-00a2fe610044" >
+			<os:retrieve doc:name="Retrieve lista allegati" key="#[vars.savePayload.pratica.notificationNumberSap]" objectStore="Object_store" target="storedList" />
+			<error-handler >
+				<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="5f188d98-79d2-4fa5-997a-9627ad8dc322" type="OS:KEY_NOT_FOUND">
+					<logger level="INFO" doc:name="Logger" doc:id="511d1463-2643-46d8-8c8e-a5168f080c5b" />
+				</on-error-continue>
+			</error-handler>
+		</try>
+		<ee:transform doc:name="Append idAllegato">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+(vars.storedList default []) ++ [vars.savePayload.allegato.idAllegato]
+]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        
+        <os:store doc:name="Store Updated List" doc:id="40c399fc-e8cf-42b3-a485-874a56d76479"
+                  key="#[vars.savePayload.pratica.notificationNumberSap]"
+                  objectStore="Object_store">
+        </os:store>
+		<os:retrieve doc:name="Retrieve for check" doc:id="921705ca-6896-47d2-bdd2-0ab024f957ec" key="#[vars.savePayload.pratica.notificationNumberSap]" objectStore="Object_store" />
+		<choice doc:name="Choice" doc:id="d5f0a562-311c-4ac0-9ecb-2f22e104d0db" >
+			<when expression="#[sizeOf(payload) == vars.savePayload.properties.totaleAllegati as Number]">
+				<os:remove doc:name="Remove" doc:id="07578119-0707-4afa-8132-485c9379fdcd" objectStore="Object_store" key="#[vars.savePayload.pratica.notificationNumberSap]"/>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="d1c9a038-8957-4d63-bd92-97412893d620" />
+			</otherwise>
+		</choice>
+    
+</sub-flow>
+	<sub-flow name="checkAttachmentSended" doc:id="d59960d1-63a7-4947-8dca-ce6099744833" >
+		<try doc:name="Try" doc:id="624d60fd-4fe7-4a60-99f7-7729724fdc14" >
+			<os:retrieve doc:name="Retrieve lista allegati" doc:id="50f5c3d7-6bdd-40b7-8df1-157d53622b3e" key="#[vars.savePayload.pratica.notificationNumberSap]" objectStore="Object_store"/>
+			<set-variable value="#[output application/json&#10;---&#10;&#10;!(payload contains vars.savePayload.allegato.idAllegato)]" doc:name="attachJustSended" doc:id="f4f2da13-018a-4723-83b2-4ddf909a16ef" variableName="KEY_NOT_FOUND" />
+			<error-handler >
+				<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="a1574f95-9e42-4c9c-b6f3-05822bbb9aa6" type="OS:KEY_NOT_FOUND" >
+					<set-variable value="#[true]" doc:name="attachNotSended" doc:id="ea60fb45-7a4a-4768-9f8c-15ae5c2070ad" variableName="KEY_NOT_FOUND"/>
+				</on-error-continue>
+			</error-handler>
+		</try>
+	</sub-flow>
+
+</mule>
