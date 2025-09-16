@@ -67,35 +67,39 @@ payload.body]]></ee:set-payload>
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
-var items = payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.STATO_ALLEGATI.item
+ 
+var resp = payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse
+var item = (resp.STATO_ALLEGATI default {}).item default {}
+var allegatiList = ((item.ALLEGATI default {}).item) default []
+var tReturnItem =
+  if (resp == null or resp.T_RETURN == null)
+    {}
+  else if (resp.T_RETURN.item == null)
+    {}
+  else if (resp.T_RETURN.item is Array)
+    (resp.T_RETURN.item[0] default {})
+  else
+    resp.T_RETURN.item
+ 
 ---
-
 {
-pratica: {
-	notificationNumberSap: vars.savePayload.notificationNumberSap,
-    externalCode: vars.savePayload.externalCode,
-    wocode: vars.savePayload.wocode
-},
-stato_allegati: {
-  allegati_previsti: items map ((item) -> (item.ALLEGATI_PREVISTI as Number)) reduce ((value, acc = 0) -> acc + value),
-  allegati_ricevuti: items map ((item) -> (item.ALLEGATI_RICEVUTI as Number)) reduce ((value, acc = 0) -> acc + value),
-  allegati_elaborati: sizeOf (
-    items flatMap ((item) -> 
-      item.ALLEGATI.item filter (a) -> a.ELABORATO == "X"
-    )
-  ),
-  allegati: items flatMap ((item) ->
-    item.ALLEGATI.item map ((a) ->
-      a ++ { ID_ESITO: item.ID_ESITO }
-    )
-  )
-},
+  pratica: {
+    notificationNumberSap: item.NOTIFICATIONNUMBERSAP default "",
+    externalCode:         item.EXTERNALCODE          default "",
+    wocode:               item.WOCODE                default ""
+  },
+  stato_allegati: {
+    allegati_previsti:  (item.ALLEGATI_PREVISTI default "0") as Number,
+    allegati_ricevuti:  (item.ALLEGATI_RICEVUTI  default "0") as Number,
+    allegati_elaborati: sizeOf(allegatiList filter (a) -> ((a.ELABORATO default "") == "X")),
+    allegati: allegatiList map (a) -> (a ++ { ID_ESITO: item.ID_ESITO })
+  },
   status: {
-    "type": payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.T_RETURN.item.TYPE default "",
-    number: payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.T_RETURN.item.NUMBER default "",
-    message: payload.Z_WS_GEOCALL_ESITO_ALLEG_STATOResponse.T_RETURN.item.MESSAGE default ""
-  }}
-]]></ee:set-payload>
+    "type":  tReturnItem.TYPE    default "",
+    number:  tReturnItem.NUMBER  default "",
+    message: tReturnItem.MESSAGE default ""
+  }
+}]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 		<flow-ref doc:name="skipEmptyOrNull" doc:id="492efc9c-2a2e-4f0e-b9a0-d0cd1d562962" name="skipEmptyObject" />
