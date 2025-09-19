@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>226a3f77-ef40-4d3d-a819-feecee080b3d</groupId>
+	<groupId>cc2a9e24-8e94-4042-8c32-c19a2189dc8d</groupId>
 	<artifactId>esito-allegati-geocall-proc-api</artifactId>
 	<version>1.0.0</version>
 	<packaging>mule-application</packaging>
@@ -40,7 +40,7 @@
 						<muleVersion>4.4.0</muleVersion>
 						<server>anypoint-exchange-v3</server>
 						<applicationName>${project.name}</applicationName>
-						<businessGroupId>${project.groupId}</businessGroupId>
+						<businessGroupId>cc2a9e24-8e94-4042-8c32-c19a2189dc8d</businessGroupId>
 						<replicas>1</replicas>
 						<vCores>0.1</vCores>
 						<deploymentSettings>
@@ -99,13 +99,6 @@
 			<classifier>mule-plugin</classifier>
 		</dependency>
 		<dependency>
-			<groupId>226a3f77-ef40-4d3d-a819-feecee080b3d</groupId>
-			<artifactId>esito-allegati-geocall-proc</artifactId>
-			<version>1.0.15</version>
-			<classifier>raml</classifier>
-			<type>zip</type>
-		</dependency>
-		<dependency>
 			<groupId>org.mule.connectors</groupId>
 			<artifactId>mule-wsc-connector</artifactId>
 			<version>1.11.2</version>
@@ -122,6 +115,13 @@
 			<artifactId>mule-objectstore-connector</artifactId>
 			<version>1.2.2</version>
 			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>cc2a9e24-8e94-4042-8c32-c19a2189dc8d</groupId>
+			<artifactId>esito-allegati-geocall-proc</artifactId>
+			<version>1.0.0</version>
+			<classifier>raml</classifier>
+			<type>zip</type>
 		</dependency>
 	</dependencies>
 
