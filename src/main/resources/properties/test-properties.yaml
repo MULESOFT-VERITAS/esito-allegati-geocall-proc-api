@@ -5,7 +5,7 @@ http:
 https:
   port: "8082"
 api: 
-  id: "2568761"
+  id: "2616783"
 system:
     protocol: "HTTP"
     host: "does-not-exist.cloudhub.io"
@@ -30,8 +30,8 @@ nextGen:
     services:
       outComeAttachments: "/veritaswfm/api/r1/outcome-attachments/{idAllegato}"
 mq:
-  host: "https://mq-eu-central-1.eu1.anypoint.mulesoft.com/api/v1/organizations/226a3f77-ef40-4d3d-a819-feecee080b3d/environments/79602283-f839-455e-9aa0-be398181a346"
-  client_id: "3568765a8df3460e95593f30c1807b4e"
+  host: "https://mq-eu-central-1.eu1.anypoint.mulesoft.com/api/v1/organizations/cc2a9e24-8e94-4042-8c32-c19a2189dc8d/environments/bfda2840-2682-4582-807c-3583669202af"
+  client_id: "fe10186d1a7d4a3bbff59756feab17d9"
   esito-allegati: "TEST-QUEUE-allegati-geocall-lista"
   max-local-message-geoCallProc: "8"
 store:
