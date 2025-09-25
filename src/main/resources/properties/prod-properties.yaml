@@ -16,17 +16,20 @@ system:
 sap:
     protocol: "HTTPS"
     user: "SOA_GEOCALL"
-    host: "----"
+    host: "erp.gruppoveritas.it"
     port: "443"
-    address: "https://------/sap/bc/srt/rfc/sap/z_wfm_geocall_esito_allegati/300/zwfm_geocall_esito_allegati/zwfm_geocall_esito_allegati"
+    address: "https://erp.gruppoveritas.it/sap/bc/srt/rfc/sap/z_wfm_geocall_esito_allegati/300/zwfm_geocall_esito_allegati/zwfm_geocall_esito_allegati"
     uri: "/sap/bc/srt/rfc/sap/z_wfm_geocall_esito_allegati/300/zwfm_geocall_esito_allegati/zwfm_geocall_esito_allegati"
 nextGen:
     protocol: "HTTPS"
-    host: "-----------"
+    host: "veritas.fsm.overit.cloud" 
     port: "443"
     basePath: "/"
     connectionIdleTimeout: "10000"
-    responseTimeout: "60000" 
+    responseTimeout: "60000"
+    token: "https://veritas.fsm.overit.cloud/veritaswfm/w/api/configurations/identity/r1/tokens"
+    user: "-------"
+    password: "--------" 
     services:
       outComeAttachments: "/veritaswfm/api/r1/outcome-attachments/{idAllegato}"
 mq:
