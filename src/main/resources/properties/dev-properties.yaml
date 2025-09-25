@@ -26,7 +26,10 @@ nextGen:
     port: "443"
     basePath: "/"
     connectionIdleTimeout: "10000"
-    responseTimeout: "60000" 
+    responseTimeout: "60000"
+    token: "https://veritas.fsm-test.overit.cloud/veritaswfm/api/configurations/identity/r1/tokens"
+    user: "integrated.system@veritaswfm"
+    password: "OveritSwagger$2025"
     services:
       outComeAttachments: "/veritaswfm/api/r1/outcome-attachments/{idAllegato}"
 mq:

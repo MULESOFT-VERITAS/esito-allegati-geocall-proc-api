@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<sub-flow name="TokenOverit" doc:id="367f6462-5628-4674-aa82-778d517d6887" >
+		<ee:transform doc:name="set user e password" doc:id="604b0595-23b9-4bba-bd1f-adfbc19fd92c" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="TokenIns" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "username": Mule::p('nextGen.user'),
+  "password": Mule::p('nextGen.password')
+}
+]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<http:request method="POST" doc:name="Request" doc:id="8137b5fd-5017-4aba-aba9-18d203989d2a" url="${nextGen.token}" target="token" targetValue="#['Bearer '++ payload.accessToken]">
+			<http:body ><![CDATA[#[vars.TokenIns]]]></http:body>
+		</http:request>
+	</sub-flow>
+</mule>
