@@ -28,8 +28,8 @@ nextGen:
     connectionIdleTimeout: "10000"
     responseTimeout: "60000"
     token: "https://veritas.fsm.overit.cloud/veritaswfm/w/api/configurations/identity/r1/tokens"
-    user: "-------"
-    password: "--------" 
+    user: "integrated.system@veritaswfm"
+    password: "Veritas2025!" 
     services:
       outComeAttachments: "/veritaswfm/api/r1/outcome-attachments/{idAllegato}"
 mq:
