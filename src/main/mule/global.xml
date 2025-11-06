@@ -59,8 +59,8 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 	<import doc:name="ImportHealthCheck" doc:id="75cffdd5-6881-4905-97dc-62a8ff5c9418" file="health-check.xml" />
 	<configuration doc:name="Configuration" doc:id="ed55aece-48f9-4416-b69d-394ed03e223d" defaultErrorHandler-ref="Global_Error_Handler" >
 	</configuration>
-	<global-property doc:name="Global Property" doc:id="310c0bf8-e020-4f27-bbae-0e3963ad32cd" name="mule.env" value="dev" />
-	<global-property doc:name="Global Property" doc:id="f6852164-4337-4d3f-825a-b3715c7dbd66" name="mule.secure.key" value='cC-iDtj1:GivEF_df28;$L3db"&lt;09~' />
+	<global-property doc:name="Global Property" doc:id="310c0bf8-e020-4f27-bbae-0e3963ad32cd" name="mule.env" value="test" />
+	<global-property doc:name="Global Property" doc:id="f6852164-4337-4d3f-825a-b3715c7dbd66" name="mule.secure.key" value='2&amp;cTb,%"FGrr&amp;2CJEk-y93T&gt;75IGn]' />
 <http:request-config name="HTTP_Configuration_SAP" doc:name="HTTP Request configuration" doc:id="42f44970-cbdd-4caf-9b30-903182e16351" responseTimeout="${response.timeout}">
 		<http:request-connection protocol="HTTPS" host="${sap.host}" port="${sap.port}">
 			<reconnection >

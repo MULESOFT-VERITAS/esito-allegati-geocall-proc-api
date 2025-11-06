@@ -15,7 +15,7 @@ output application/json
 ---
 {
   "username": Mule::p('nextGen.user'),
-  "password": Mule::p('nextGen.password')
+  "password": Mule::p('secure::nextGen.password')
 }
 ]]></ee:set-variable>
 			</ee:variables>
